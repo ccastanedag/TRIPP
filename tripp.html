@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,9 +10,62 @@
     <link rel="stylesheet" href="css/tripp.css">
     <title>TRIPP</title>
 </head>
+
 <body>
+
+    <!-- Always shows a header, even in smaller screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <span class="mdl-layout-title">Title</span>
+                <!-- Add spacer, to align navigation to the right -->
+                <div class="mdl-layout-spacer"></div>
+                <!-- Navigation. We hide it in small screens. -->
+                <nav class="mdl-navigation mdl-layout--large-screen-only">
+                    <a class="mdl-navigation__link" href="">Link</a>
+                    <a class="mdl-navigation__link" href="">Link</a>
+                    <a class="mdl-navigation__link" href="">Link</a>
+                    <a class="mdl-navigation__link" href="">Link</a>
+                </nav>
+            </div>
+        </header>
+        <div class="mdl-layout__drawer">
+            <span class="mdl-layout-title">Title</span>
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="">Link</a>
+                <a class="mdl-navigation__link" href="">Link</a>
+                <a class="mdl-navigation__link" href="">Link</a>
+                <a class="mdl-navigation__link" href="">Link</a>
+            </nav>
+        </div>
+        <main class="mdl-layout__content">
+            <div class="page-content">
+                <div class="map-content">
+
+                </div>
+                <div class="places-info ">
+                    <div class="places-info-content mdl-shadow--2dp through mdl-shadow--16dp">
+                        <div class="country-content">
+                            Lima, PERU
+                        </div>
+                        <div class="search-content">
+                            Search place
+                        </div>
+                        <div class="places-content">
+                            Places content goes here
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
     <script src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.2.js"></script>
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYMXMUc1OXoLOBWuCP20CGes-xhiFXdEg&callback=initMap"
+        async defer></script> -->
     <script src="js/tripp.js"></script>
 </body>
+
 </html>

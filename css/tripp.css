@@ -1,0 +1,94 @@
+
+.mdl-layout__content{
+    display:flex;
+    align-items: stretch;
+    align-content: stretch;
+}
+
+.page-content{
+    flex: 1;
+    position : relative;
+    background-color: lightgray;
+}
+
+/* ================== MAP - Begin =================*/
+
+.map-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    position: relative;
+    
+}
+
+/* ================== MAP - End =================*/
+
+/* ================== PLACES - Begin =================*/
+
+.places-info{
+    width:100%;
+    height:40%;
+    position:absolute;
+    bottom:0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.places-info-content{
+    display:flex;
+    flex-direction: column;
+    width:95%;
+    height:90%;
+    background-color: red;
+    -webkit-border-radius: 5px; 
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.country-content{
+    background-color:blue;
+    flex: 1;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px
+}
+
+.search-content, .places-content {
+    background-color: white;
+}
+
+.search-content {
+    flex:2;
+}
+
+.places-content {
+    flex:8;
+    -webkit-border-bottom-right-radius: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius-bottomright: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+/*--- Media Query Desktop*/
+@media only screen and (min-width: 600px)
+{
+    .places-info{
+        top:0;
+        left:2em;
+        width: 45%;
+        max-width: 350px;
+        height:100%;
+    }
+}
+
+/* ================== PLACES - End =================*/
+
+
+     
