@@ -48,8 +48,18 @@
                         <div class="search-content">
                             Search place
                         </div>
-                        <div class="places-content">
-                            Places content goes here
+                        <div class="places-content" data-bind="foreach: arrayPlaces">
+                            <div class="place-detail">
+                                <div class="place-name">
+                                    <span data-bind="text: placeName"></span>
+                                </div>
+                                <div class="place-category">
+                                    <span data-bind="text: placeCategory"></span>
+                                </div>
+                                <div class="place-rating">
+                                    <span data-bind="text: placeRating"></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
