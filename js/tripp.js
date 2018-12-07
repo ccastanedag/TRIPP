@@ -35,21 +35,34 @@ var Place = function (data) {
 var TrippViewModel = function () {
     var self = this;
 
+    self.arrayPlaces = ko.observableArray();
+
+    // When program starts this is false, 
+    // only if the response from Google Places API is OK
+    // this value is set to TRUE 
     self.isSearchContentValid = ko.observable(false);
 
-    // Load the dummy data to render the list
-    self.arrayPlaces = ko.observableArray();
-    for (const place of dummyPlaces) {
-        self.arrayPlaces.push(new Place(place));
-    }
-
-    // Search Content
-    self.searchContent = function(data, event){
-        // TODO: If Google Places return values
-        
-        if($('#search').val() !== "")
+    // This function receive the string from #search
+    // and send to Google Places.
+    // With the response data, this function package
+    // the info into Places instances which are rendered
+    // on the UI
+    self.gatherPlacesData = function () {
+        // TEMPORAL DUMMY DATA: Load the dummy data to render the list
+        if ($('#search').val() !== "")
+        {
             self.isSearchContentValid(true);
+            
+            for (const place of dummyPlaces) {
+                self.arrayPlaces.push(new Place(place));
+            }
+        }
+            
+
+        // TEMPORAL DUMMY DATA
     };
+
+
 
 };
 
