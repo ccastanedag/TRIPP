@@ -35,11 +35,21 @@ var Place = function (data) {
 var TrippViewModel = function () {
     var self = this;
 
+    self.isSearchContentValid = ko.observable(false);
+
     // Load the dummy data to render the list
     self.arrayPlaces = ko.observableArray();
     for (const place of dummyPlaces) {
         self.arrayPlaces.push(new Place(place));
     }
+
+    // Search Content
+    self.searchContent = function(data, event){
+        // TODO: If Google Places return values
+        
+        if($('#search').val() !== "")
+            self.isSearchContentValid(true);
+    };
 
 };
 

@@ -80,7 +80,18 @@
 
 .search-content {
     flex:2;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;    
 }
+
+.search-form {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 
 .places-content {
     flex:8;
@@ -103,6 +114,22 @@
     flex-direction: column;
 }
 
+.search-div{
+    width: 95%
+}
+
+.search-button{
+    
+}
+
+.explanation-text{
+    color: #1e1344;
+    text-align: center;
+    font-size: 0.9em;
+    width: 60%;
+    margin-bottom:0;
+}
+
 /*--- Media Query Desktop*/
 @media only screen and (min-width: 600px)
 {
@@ -117,6 +144,10 @@
     .country {
         padding-left: 0.8em;
         font-size: 1.05em;
+    }
+
+    .explanation-text {
+        font-size: 0.95em;
     }
 }
 
