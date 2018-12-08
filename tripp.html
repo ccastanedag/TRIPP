@@ -2,12 +2,13 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.deep_purple-pink.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
     <link rel="stylesheet" href="css/tripp.css">
     <title>TRIPP</title>
 </head>
@@ -47,29 +48,36 @@
                             <div class="country">Lima, PERU</div>
                         </div>
                         <div class="search-content">
-                            <p class="explanation-text"><strong>TRIPP</strong> allows you to search places like cafeterias, bars, hotels, etc and save them to your favorites. Try it!</p>
+                            <p data-bind="visible:isSearchContentValid() === false" class="explanation-text"><strong>TRIPP</strong>
+                                allows you to search places like cafeterias, bars, hotels, etc and save them to your
+                                favorites list. Try it!</p>
                             <!-- Search Form -->
-                            <form action="#" class="search-form">
-                                <div class="search-div mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="text" id="search" pattern="[A-Z,a-z, ]*">
+                            <form autocomplete="off" action="#" id="form-search" class="form-search flex-column">
+                                <div id="div-search" class="mdl-textfield mdl-js-textfield">
+                                    <input class="mdl-textfield__input" type="text" id="input-search" pattern="[A-Z,a-z, ]*">
                                     <label class="mdl-textfield__label" for="search">Search...</label>
                                     <span class="mdl-textfield__error">Letters and spaces only</span>
                                 </div>
-                                <button data-bind = "click:gatherPlacesData" class="search-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                                <button data-bind="click:gatherPlacesData" id="button-search" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                                     Let's Go
                                 </button>
                             </form>
                         </div>
                         <div class="places-content" data-bind="foreach: arrayPlaces, visible: isSearchContentValid">
                             <div class="place-detail">
-                                <div class="place-name">
-                                    <span data-bind="text: placeName"></span>
+                                <div class="place-image">
+                                    <img data-bind="attr:{src:placeImage, width:64}" src="" alt="">
                                 </div>
-                                <div class="place-category">
-                                    <span data-bind="text: placeCategory"></span>
-                                </div>
-                                <div class="place-rating">
-                                    <span data-bind="text: placeRating"></span>
+                                <div class="place-data">
+                                    <div class="place-name">
+                                        <span data-bind="text: placeName"></span>
+                                    </div>
+                                    <div class="place-category">
+                                        <span data-bind="text: placeCategory"></span>
+                                    </div>
+                                    <div class="place-rating">
+                                        <span data-bind="starRating: placeRating"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -79,10 +87,11 @@
         </main>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.2.js"></script>
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
     <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYMXMUc1OXoLOBWuCP20CGes-xhiFXdEg&callback=initMap" async defer></script>  -->
-    <script src="js/map.js"></script>
+    <!-- <script src="js/map.js"></script> -->
     <script src="js/tripp.js"></script>
 </body>
 
