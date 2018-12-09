@@ -181,9 +181,15 @@ var mapStylingOptions = [
 
 var styledMap;
 var geocoder;
+var $city = "Lima";
+var $country = "Peru";
+var $imputSearch = $('#input-search').val();
 
-function codeAddress() {
-  let address = "lima,peru";
+
+// This function use GeoCoder feature from Google Map API 
+// to center the map to $city, $country
+var codeAddress = function() {
+  let address = `${$city}, ${$country}`;
   geocoder.geocode({ 'address': address }, function (results, status) {
     if (status == 'OK') {
       styledMap.setCenter(results[0].geometry.location);
@@ -193,7 +199,8 @@ function codeAddress() {
   });
 }
 
-function initMap() {
+// Loading the map using Google Map API
+var initMap = function () {
   geocoder = new google.maps.Geocoder();
   styledMap = new google.maps.Map(document.getElementsByClassName('map-content')[0], {
     center: { lat: -34.397, lng: 150.644 },
