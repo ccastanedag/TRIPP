@@ -6,7 +6,7 @@ var Place = function (data) {
     this.placeType = data.type;
     this.placeRating = data.rating;
     this.placeImage = data.image;
-
+    this.marker  = data.marker;
 };
 
 var TrippViewModel = function () {
@@ -76,8 +76,14 @@ var TrippViewModel = function () {
                     let marker = new google.maps.Marker({
                         position: result.geometry.location,
                         map: styledMap,
-                        title: result.name
+                        title: result.name,
+                        icon : 'img/map-marker.png'
                     });
+                    // Add the instance of the marker to the respective Place
+                    // This will be usefull to play the animation when a place is selected
+                    placeData.marker = marker;
+                    // Add the marker to the array of Markers, having an array makes easier
+                    // to delete the markers when user request a new query search (cafeteria)
                     TripViewModelInstance.arrayMarkers.push(marker);
                 }
 
