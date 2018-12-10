@@ -5,8 +5,8 @@ var Place = function (data) {
     this.placeName = data.name;
     this.placeType = data.type;
     this.placeRating = data.rating;
-    this.placeImage = data.image;
-    this.marker  = data.marker;
+    this.placeImage = ko.observable(data.image);
+    this.marker = data.marker;
 };
 
 var TrippViewModel = function () {
@@ -15,6 +15,8 @@ var TrippViewModel = function () {
 
     self.arrayPlaces = ko.observableArray();
     self.arrayMarkers = [];
+    self.selectedPlace = ko.observable();
+    self.placesService;
 
     // When program starts this is false, 
     // only if the response from Google Places API is OK
@@ -36,8 +38,8 @@ var TrippViewModel = function () {
 
         // TODO: Work on a proper validation function, this is just temporal
         if ($inputSearch !== "") {
-            placesService = new google.maps.places.PlacesService(styledMap);
-            placesService.textSearch(requestPlaces, callBackPlaces);
+            self.placesService = new google.maps.places.PlacesService(styledMap);
+            self.placesService.textSearch(requestPlaces, callBackPlaces);
         }
     };
 
@@ -59,7 +61,8 @@ var TrippViewModel = function () {
 
                 // Create Places instances with data received and add them to arrayPlaces
                 let truncateName = $('header').width() < 600 ? 30 : 22;
-                for (const result of results) {
+                
+                for (const [index, result] of results.entries()) {
                     let placeData = {
                         placeId: result.place_id,
                         // if name is longer than truncateName then truncate the name
@@ -67,24 +70,37 @@ var TrippViewModel = function () {
                         // To convert the type to more a human-friendly format
                         type: result.types[0].replace(/_/g, ' '),
                         rating: result.rating,
-                        image: "img/dummy-picture4.png"
+                        image: result.photos[0].getUrl({maxWidth: 64, maxHeight: 64})
                     }
-                    let googlePlace = new Place(placeData);
-                    TripViewModelInstance.arrayPlaces.push(googlePlace);
-
+                    
                     // Add the proper markers on the map per each place
                     let marker = new google.maps.Marker({
                         position: result.geometry.location,
                         map: styledMap,
                         title: result.name,
-                        icon : 'img/map-marker.png'
+                        icon: 'img/map-marker.png'
                     });
+                    marker.addListener('click', function () {
+                        getPlaceFromMarker(this);
+                    });
+
                     // Add the instance of the marker to the respective Place
                     // This will be usefull to play the animation when a place is selected
                     placeData.marker = marker;
                     // Add the marker to the array of Markers, having an array makes easier
                     // to delete the markers when user request a new query search (cafeteria)
-                    TripViewModelInstance.arrayMarkers.push(marker);
+                    self.arrayMarkers.push(marker);
+
+                    // Now that placeData is fully set, create an instances and
+                    // pass it to arrayPlaces
+                    let googlePlace = new Place(placeData);
+                    self.arrayPlaces.push(googlePlace);
+
+                    if (index === 0) {
+                        // As soon as we load the data, select the first one only
+                        self.selectedPlace(googlePlace);
+                        self.selectedPlace().marker.setAnimation(google.maps.Animation.BOUNCE); 
+                    }
                 }
 
                 $('#input-search').val("");
@@ -110,6 +126,51 @@ var TrippViewModel = function () {
                 break;
         }
     }
+
+    // This function search a places from a marker
+    // (useful to implement click on marker -> select place)
+    function getPlaceFromMarker(marker) {
+        for (const place of self.arrayPlaces()) {
+            if (place.marker === marker) {
+                if (self.selectedPlace() !== place) {
+
+                    $('.places-content').scrollTop($(".selectedItem").position().top);
+
+                    self.clickSelectPlace(place);
+
+                    $('.places-content').animate({
+                        scrollTop: $(".selectedItem").position().top
+                    }, 350);
+
+                }
+            }
+        }
+    }
+
+    self.clickSelectPlace = function (place) {
+        let oldPlace = self.selectedPlace();
+
+        if (oldPlace !== place) {
+            
+            // Turn off the marker animation of the oldPlace
+            // and Turn on the animation of the marker of the new Place
+            oldPlace.marker.setAnimation(-1);
+            self.selectedPlace(place);
+            self.selectedPlace().marker.setAnimation(google.maps.Animation.BOUNCE);
+            // Center the map to the new place (marker clicked)
+            styledMap.panTo(place.marker.getPosition());
+        }
+
+    };
+
+    /*function toggleBounce(marker) {
+        if ((marker.getAnimation() !== null) && (marker.getAnimation() !== undefined)) {
+            marker.setAnimation(null);
+            marker.setAnimation(undefined);
+        } else {
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+    }*/
 
     /* This function has as main purpose to modify the styling 
     *  of "Search-Form" when self.isSearchContentValid() is TRUE
@@ -178,7 +239,7 @@ ko.bindingHandlers.starRating = {
             rating: valueAccesor(),
             readOnly: true,
             starWidth: '12px',
-            normalFill: '#eae8e3',
+            normalFill: '#c8c8c8ff',
             ratedFill: '#673ab7'
         });
     }

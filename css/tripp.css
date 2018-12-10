@@ -109,6 +109,7 @@
     flex-direction: column;
     overflow-y : scroll;
     width:95%;
+    position: relative;
 }
 
 .places-content>div {
@@ -135,7 +136,8 @@
 }
 
 .place-name>span{
-    color: #279db3;
+   /* color: #279db3;*/
+    color : #673ab7;
     font-weight: bold;
     font-size: 1.15em;
 }
@@ -163,6 +165,9 @@
     margin-left : 0.5em;
 }
 
+.selectedItem {
+ background-color : #ffebf3ff;
+}
 
 /*--- Media Query Desktop*/
 @media only screen and (min-width: 600px)
