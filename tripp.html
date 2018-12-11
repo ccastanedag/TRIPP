@@ -63,7 +63,7 @@
                                 </button>
                             </form>
                         </div>
-                        <div class="places-content" data-bind="foreach: arrayPlaces, visible: isSearchContentValid">
+                        <div class="places-content" data-bind="foreach: arrayPlaces, visible: isSearchContentValid()">
                             <div data-bind = "click: $root.clickSelectPlace, css : { selectedItem: $data == $root.selectedPlace() }" class="place-detail">
                                 <div class="place-image">
                                     <img data-bind="attr:{src:placeImage, width:64, height:64}" src="" alt="">
