@@ -181,8 +181,8 @@ var mapStylingOptions = [
 
 var styledMap;
 var geocoder;
-var $city = "tokio";
-var $country = "japan";
+var $city = "trujillo";
+var $country = "peru";
 var $imputSearch = $('#input-search').val();
 
 // Loading the map using Google Map API
