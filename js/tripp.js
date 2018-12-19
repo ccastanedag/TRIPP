@@ -24,7 +24,6 @@ var TrippViewModel = function () {
 
     self.gatherPlacesData = function () {
 
-        //============  CODIGO ORIGINAL - NO BORRAR ===============
          let $inputSearch = $('#input-search').val();
          // Define que border of viewport of the map, to make the query (Ex:Cafeteria)
          let requestPlaces = {
@@ -36,30 +35,7 @@ var TrippViewModel = function () {
              let placesService = new google.maps.places.PlacesService(styledMap);
              placesService.textSearch(requestPlaces, callBackPlaces);
          }
-        //============  CODIGO ORIGINAL - NO BORRAR ===============
-
-        //============  DUMMY DATA INFO WINDOW - DELETE LATER ===============
-        /*let dummyObj = {
-            place_id: "SDASDASDQ",
-            name: "Chelo's",
-            rating: 2.0,
-            type: "restaurant",
-            formatted_address: "ijasd 1231oijasdasdasd asdasdsdasd asdas 332",
-            opening_hours: ["sdkjhaksd", "oifo4", "asdhai3", "sdkjhaksd", "oifo4", "asdhai3", "oajsdoasdasdasd"],
-            formatted_phone_number: "(055)384593",
-            review: [],
-            website: "www.google.com",
-            photos: "img/dummy-picture1.png"
-        };
-
-        var dummyMarker = new google.maps.Marker({
-            position: styledMap.getCenter(),
-            map: styledMap,
-            title: 'Hello World!'
-        });
-
-        renderInfoWindow(dummyObj, dummyMarker);*/
-        //============  DUMMY DATA INFO WINDOW - DELETE LATER ===============
+       
     };
 
     // This function makes a place "selected", this is used for when user click a place
