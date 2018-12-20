@@ -18,24 +18,53 @@ var TrippViewModel = function () {
     self.arrayMarkers = [];
     self.infoWindow = new google.maps.InfoWindow();
     self.exploredPlacesMap = new Map();
+    self.currentPage = ko.observable('Home');
+    self.city = ko.observable();
+    self.country = ko.observable();
+    self.destination = ko.computed(function(){
+        return `${self.city()}, ${self.country()}`;
+    });
 
     // When response from Google Places API is OK, value is TRUE 
     self.isSearchContentValid = ko.observable(false);
 
+    self.changePageTo = function(page){
+        self.currentPage(page);
+    };
+
+    // Center the Map to City, Country
+    self.codeAddress = function () {
+
+        self.city($('#city').val());
+        self.country($('#country').val());
+
+        // TODO: Work on a proper validation function, this is just temporal
+        if ((self.city() !== '') && (self.country() !== '')) {
+            geocoder.geocode({ 'address': self.destination() }, function (results, status) {
+                if (status == 'OK') {
+                    styledMap.setCenter(results[0].geometry.location);
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+            self.changePageTo('Map');
+        }
+    }
+
     self.gatherPlacesData = function () {
 
-         let $inputSearch = $('#input-search').val();
-         // Define que border of viewport of the map, to make the query (Ex:Cafeteria)
-         let requestPlaces = {
-             bounds: styledMap.getBounds(),
-             query: $inputSearch
-         };
-         // TODO: Work on a proper validation function, this is just temporal
-         if ($inputSearch !== "") {
-             let placesService = new google.maps.places.PlacesService(styledMap);
-             placesService.textSearch(requestPlaces, callBackPlaces);
-         }
-       
+        let $inputSearch = $('#input-search').val();
+        // Define que border of viewport of the map, to make the query (Ex:Cafeteria)
+        let requestPlaces = {
+            bounds: styledMap.getBounds(),
+            query: $inputSearch
+        };
+        // TODO: Work on a proper validation function, this is just temporal
+        if ($inputSearch !== "") {
+            let placesService = new google.maps.places.PlacesService(styledMap);
+            placesService.textSearch(requestPlaces, callBackPlaces);
+        }
+
     };
 
     // This function makes a place "selected", this is used for when user click a place
@@ -177,7 +206,7 @@ function renderInfoWindow(objectData, mapMarker) {
     TripViewModelInstance.infoWindow.close();
 
     // Destructuring of objectData 
-    let {name,
+    let { name,
         rating,
         formatted_address,
         formatted_phone_number,
@@ -212,16 +241,16 @@ function renderInfoWindow(objectData, mapMarker) {
     }
 
     // Render the proper DOM if exist or not reviews
-   /* let infoWindowReviews;
-    if (review.length > 0)
-    {
-        infoWindowReviews = `<p class="info-window-label">Reviews:</p>`;
-        for (const text of review) {
-            infoWindowReviews += ``;
-        }
-    } else {
-
-    }*/
+    /* let infoWindowReviews;
+     if (review.length > 0)
+     {
+         infoWindowReviews = `<p class="info-window-label">Reviews:</p>`;
+         for (const text of review) {
+             infoWindowReviews += ``;
+         }
+     } else {
+ 
+     }*/
 
     // This code allow to render the stars rating within the infoWindow
     let infoWindowRating = $('<div></div>').wrap('<p></p>').rateYo({
@@ -234,8 +263,7 @@ function renderInfoWindow(objectData, mapMarker) {
 
     // if place does/doesn't have phone, render the proper DOM
     let infoWindowPhone;
-    if(formatted_phone_number !== undefined)
-    {
+    if (formatted_phone_number !== undefined) {
         infoWindowPhone = `${formatted_phone_number}`;
     } else {
         infoWindowPhone = `-`;

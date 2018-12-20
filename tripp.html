@@ -21,7 +21,7 @@
             <div class="mdl-layout__header-row">
                 <!-- Title -->
                 <div class="mdl-layout-title">
-                    <img src="img/logo-navbar.png" width="120" alt="Tripp Logo">
+                    <img data-bind="click:changePageTo.bind($data,'Home')" src="img/logo-navbar.png" width="120" alt="Tripp Logo">
                 </div>
                 <!-- Add spacer, to align navigation to the right -->
                 <div class="mdl-layout-spacer"></div>
@@ -40,7 +40,7 @@
             </nav>
         </div>
         <main class="mdl-layout__content">
-            <div class="home-content">
+            <div data-bind="visible: currentPage() === 'Home'" class="home-content">
                 <div class="logo-content">
                     <img srcset="img/logo-mobile.png 185w,
                                  img/logo-desktop.png 350w"
@@ -50,7 +50,7 @@
                 </div>
                 <div class="destination-content">
                     <p class="home-text">Where you will TRIPP ?</p>
-                    <form action="" id="form-home">
+                    <form autocomplete="off" action="#" id="form-home">
                         <div class="mdl-textfield mdl-js-textfield">
                             <input class="mdl-textfield__input" type="text" id="city">
                             <label class="mdl-textfield__label" for="city">City... (Eg: Miami)</label>
@@ -60,27 +60,27 @@
                             <label class="mdl-textfield__label" for="country">Country... (Eg: USA)</label>
                         </div>
                         <!-- Accent-colored raised button with ripple -->
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                        <button data-bind="click:codeAddress" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                             Let's Go
                         </button>
                     </form>
                 </div>
             </div>
-            <!--
-            <div class="page-content">
+            
+            <div data-bind="visible: currentPage() === 'Map'" class="page-content">
                 <div class="map-content">
 
                 </div>
                 <div class="places-info ">
                     <div class="places-info-content mdl-shadow--2dp through mdl-shadow--16dp">
                         <div class="country-content">
-                            <div class="country">Lima, PERU</div>
+                            <div data-bind="text:destination" class="country"></div>
                         </div>
                         <div class="search-content">
                             <p data-bind="visible:isSearchContentValid() === false" class="explanation-text"><strong>TRIPP</strong>
                                 allows you to search places like cafeterias, bars, hotels, etc and save them to your
                                 favorites list. Try it!</p>
-                            Search Form 
+                            <!-- Search Form  -->
                             <form autocomplete="off" action="#" id="form-search" class="form-search flex-column">
                                 <div id="div-search" class="mdl-textfield mdl-js-textfield">
                                     <input class="mdl-textfield__input" type="text" id="input-search" pattern="[A-Z,a-z, ]*">
@@ -112,14 +112,14 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div> 
         </main>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.2.js"></script>
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-    <!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYMXMUc1OXoLOBWuCP20CGes-xhiFXdEg&libraries=places"></script> -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYMXMUc1OXoLOBWuCP20CGes-xhiFXdEg&libraries=places"></script>
     <script src="js/map.js"></script>
     <script src="js/tripp.js"></script>
 </body>

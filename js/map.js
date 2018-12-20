@@ -181,9 +181,6 @@ var mapStylingOptions = [
 
 var styledMap;
 var geocoder;
-var $city = "trujillo";
-var $country = "peru";
-var $imputSearch = $('#input-search').val();
 
 // Loading the map using Google Map API
 var initMap = function () {
@@ -193,22 +190,6 @@ var initMap = function () {
     zoom: 15,
     disableDefaultUI: true,
     styles: mapStylingOptions
-  });
-
-  // Center styledMap to address (city, COUNTRY) 
-  codeAddress();
-}
-
-// This function use GeoCoder feature from Google Map API 
-// to center the map to $city, $country
-var codeAddress = function() {
-  let address = `${$city}, ${$country}`;
-  geocoder.geocode({ 'address': address }, function (results, status) {
-    if (status == 'OK') {
-      styledMap.setCenter(results[0].geometry.location);
-    } else {
-      alert('Geocode was not successful for the following reason: ' + status);
-    }
   });
 }
 
