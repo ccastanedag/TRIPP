@@ -21,6 +21,10 @@
     box-shadow: 0px 10px 70px 0px rgba(0,86,172,0.85);
 }
 
+/*=======================================================================*/
+/*==================        MAP PAGE STYLING         ====================*/
+/*=======================================================================*/
+
 /* ================== MAP - Begin =================*/
 
 .map-content {
@@ -169,27 +173,6 @@
  background-color : #ffebf3ff;
 }
 
-/*--- Media Query Desktop*/
-@media only screen and (min-width: 600px)
-{
-    .places-info{
-        top:0;
-        left:2em;
-        width: 45%;
-        max-width: 350px;
-        height:100%;
-    }
-
-    .country {
-        padding-left: 0.8em;
-        font-size: 1.05em;
-    }
-
-    .explanation-text {
-        font-size: 0.95em;
-    }
-}
-
 /* ================== PLACES - End =================*/
 
 /* ================== INFOWINDOW - Begin =================*/
@@ -258,8 +241,88 @@
     flex-grow:1;
 }
 
-
-
-
 /* ================== INFOWINDOW - End =================*/
-     
+
+/* ================== MEDIAQUERIES - Desktop - Begin =================*/
+@media only screen and (min-width: 600px)
+{
+    .places-info{
+        top:0;
+        left:2em;
+        width: 45%;
+        max-width: 350px;
+        height:100%;
+    }
+
+    .country {
+        padding-left: 0.8em;
+        font-size: 1.05em;
+    }
+
+    .explanation-text {
+        font-size: 0.95em;
+    }
+}
+
+/* ================== MEDIAQUERIES - Desktop - End =================*/
+
+/*=======================================================================*/
+/*==================       HOME PAGE STYLING         ====================*/
+/*=======================================================================*/
+
+.home-content{
+    background: url(../img/tripp-background.png) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    align-self : stretch;
+    flex : 1;
+    display: flex;
+    flex-direction: column;
+    justify-content : center;
+    align-items: center;
+}
+
+#form-home {
+    display:flex;
+    flex-direction: column;
+}
+
+#form-home .mdl-textfield__input{
+    border-bottom: 1px solid #fff;
+}
+
+#form-home .mdl-button {
+    align-self: center;
+    margin-top: 1em;
+}
+
+#form-home .mdl-textfield__input, #form-home .mdl-textfield__label {
+    color: white;
+    opacity: 0.75;
+}
+
+.home-text {
+    margin-top : 1.25em;
+    color: white;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+/* ================== MEDIAQUERIES - Desktop - Begin =================*/
+
+@media only screen and (min-width: 600px)
+{
+    .home-content {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .logo-content {
+        margin-right : 8.25em;
+    }
+}
+
+/* ================== MEDIAQUERIES - Desktop - End =================*/
