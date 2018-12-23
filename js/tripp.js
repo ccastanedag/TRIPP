@@ -7,7 +7,32 @@ var Place = function (data) {
     this.placeRating = data.rating;
     this.placeImage = data.image;
     this.marker = data.marker;
+    this.addDetailData = function (result) {
+        this.formattedAddress = result.formatted_address;
+        this.formattedPhoneNumber = result.formatted_phone_number;
+        this.website = result.website;
+        this.photos = result.photos;
+    };
+    this.returnAsObject = function () {
+        let obj = {
+            placeId: this.placeId,
+            name: this.placeName,
+            type: this.placeType,
+            rating: this.placeRating,
+            image: this.placeImage,
+            formatted_address: this.formattedAddress,
+            formatted_phone_number: this.formattedPhoneNumber,
+            website: this.website,
+            photos: this.photos
+        };
+        return obj;
+    };
 };
+
+var FavoritePlace = function (data) {
+    this.destination = data.destination;
+    this.places = data.places;// This will be a SET of Places instances
+}
 
 var TrippViewModel = function () {
     var self = this;
@@ -21,22 +46,23 @@ var TrippViewModel = function () {
     self.currentPage = ko.observable('Home');
     self.city = ko.observable();
     self.country = ko.observable();
-    self.destination = ko.computed(function(){
+    self.destination = ko.pureComputed(function () {
         return `${self.city()}, ${self.country()}`;
     });
+    self.setFavoritesPlaces = ko.observableArray(); // Gives the structure to render the data of Favorites
 
     // When response from Google Places API is OK, value is TRUE 
     self.isSearchContentValid = ko.observable(false);
 
-    self.changePageTo = function(page){
+    self.changePageTo = function (page) {
         self.currentPage(page);
     };
 
     // Center the Map to City, Country
     self.codeAddress = function () {
 
-        self.city($('#city').val());
-        self.country($('#country').val());
+        self.city(toProperCase($('#city').val()));
+        self.country($('#country').val().toUpperCase());
 
         // TODO: Work on a proper validation function, this is just temporal
         if ((self.city() !== '') && (self.country() !== '')) {
@@ -125,6 +151,55 @@ var TrippViewModel = function () {
             renderInfoWindow(self.exploredPlacesMap.get(place.placeId), place.marker);
         }
     }
+
+    self.addToFavorites = function () {
+
+        let selfDestination = self.destination();
+        let selfSelectedPlace = self.selectedPlace();
+        let destinationData = localStorage.getItem(selfDestination);
+        let dummyPlaces = [];
+
+        // Save to Favorite Succes Snackbar
+        let notification = document.querySelector('.mdl-js-snackbar');
+        let data = {
+            message: 'The place has successfully added to Favorites',
+            actionHandler: function (event) { },
+            actionText: 'Undo',
+            timeout: 4000
+        };
+       
+
+        // If localStorage is empty
+        if (localStorage.length === 0) {
+            dummyPlaces.push(selfSelectedPlace.returnAsObject());
+            localStorage.setItem(selfDestination, JSON.stringify(dummyPlaces));
+            notification.MaterialSnackbar.showSnackbar(data);
+
+        } else {
+            // If destination (Eg: Lima, Perú) exist already as key within localStorage
+            if (destinationData !== null) {
+                let placesData = JSON.parse(destinationData);
+                // If place exist within localStorage - Show Snackbar
+                if (isElementInSetByAttribute(selfSelectedPlace.returnAsObject(), placesData, "placeId")) {
+                    let notification = document.querySelector('.mdl-js-snackbar');
+                    let data = {
+                        message: 'This place is already in your Favorites',
+                        timeout: 4000
+                    };
+                    notification.MaterialSnackbar.showSnackbar(data);
+
+                } else {
+                    placesData.push(selfSelectedPlace.returnAsObject());
+                    localStorage.setItem(selfDestination, JSON.stringify(placesData));
+                    notification.MaterialSnackbar.showSnackbar(data);
+                }
+            } else {
+                dummyPlaces.push(selfSelectedPlace.returnAsObject());
+                localStorage.setItem(selfDestination, JSON.stringify(dummyPlaces));
+                notification.MaterialSnackbar.showSnackbar(data);
+            }
+        }
+    }
 };
 
 //=============================== KNOCKOUT  ========================
@@ -150,6 +225,25 @@ $(window).resize(function () {
     TripViewModelInstance.width = $('header').width();
     stylingSearchForm();
 });
+
+// Convert string to Title Case
+var toProperCase = function (text) {
+    return text.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+};
+
+// Add To Favorites (works as bridge function between infoWindow DOM and ViewModel)
+var addToFavorites = function () {
+    TripViewModelInstance.addToFavorites();
+};
+
+// Search an element inside iterable using attribute as criteria
+var isElementInSetByAttribute = function (element, set, attribute) {
+    for (const iterator of set) {
+        if (element[attribute] === iterator[attribute])
+            return true;
+    }
+    return false;
+};
 
 // This function has as main purpose to modify the styling 
 //   of "Search-Form" when isSearchContentValid() is TRUE
@@ -224,7 +318,7 @@ function renderInfoWindow(objectData, mapMarker) {
             </button>
         </div>
         <div class="info-window-button-favorite">
-            <button class="info-window-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            <button onclick="addToFavorites()" class="info-window-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
             Favorite
             </button>
         </div>
@@ -233,24 +327,12 @@ function renderInfoWindow(objectData, mapMarker) {
         infoWindowsButton =
             `
         <div class="info-window-button-favorite">
-            <button class="info-window-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            <button onclick="addToFavorites()" class="info-window-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
             Favorite
             </button>
         </div>
         `;
     }
-
-    // Render the proper DOM if exist or not reviews
-    /* let infoWindowReviews;
-     if (review.length > 0)
-     {
-         infoWindowReviews = `<p class="info-window-label">Reviews:</p>`;
-         for (const text of review) {
-             infoWindowReviews += ``;
-         }
-     } else {
- 
-     }*/
 
     // This code allow to render the stars rating within the infoWindow
     let infoWindowRating = $('<div></div>').wrap('<p></p>').rateYo({
@@ -407,7 +489,8 @@ function callBackPlaceDetail(result, status) {
 
     switch (status) {
         case google.maps.places.PlacesServiceStatus.OK:
-
+            // Fill the details data obtained for the selectedPlace
+            TripViewModelInstance.selectedPlace().addDetailData(result);
             TripViewModelInstance.exploredPlacesMap.set(result.place_id, result);
             renderInfoWindow(result, TripViewModelInstance.selectedPlace().marker);
 

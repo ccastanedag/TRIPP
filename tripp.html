@@ -66,7 +66,7 @@
                     </form>
                 </div>
             </div>
-            
+
             <div data-bind="visible: currentPage() === 'Map'" class="page-content">
                 <div class="map-content">
 
@@ -93,7 +93,8 @@
                             </form>
                         </div>
                         <div class="places-content" data-bind="foreach: arrayPlaces, visible: isSearchContentValid()">
-                            <div data-bind = "click: $root.clickSelectPlace, css : { selectedItem: $data == $root.selectedPlace() }" class="place-detail">
+                            <div data-bind="click: $root.clickSelectPlace, css : { selectedItem: $data == $root.selectedPlace() }"
+                                class="place-detail">
                                 <div class="place-image">
                                     <img data-bind="attr:{src:placeImage, width:64, height:64}" src="" alt="">
                                 </div>
@@ -112,7 +113,58 @@
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
+            <div data-bind="visible:currentPage === 'Favorites'" class="favorites-content">
+                <div class="map-content">
+
+                </div>
+                <div class="places-info ">
+                    <div class="places-info-content mdl-shadow--2dp through mdl-shadow--16dp">
+                        <div class="country-content">
+                            <div class="country">Favorites</div>
+                        </div>
+                        <div class="search-content">
+                            <p data-bind="visible:isSearchContentValid() === false" class="explanation-text"><strong>TRIPP</strong>
+                                allows you to search places like cafeterias, bars, hotels, etc and save them to your
+                                favorites list. Try it!</p>
+                            <!-- Search Form  -->
+                            <form autocomplete="off" action="#" id="form-search" class="form-search flex-column">
+                                <div id="div-search" class="mdl-textfield mdl-js-textfield">
+                                    <input class="mdl-textfield__input" type="text" id="input-search" pattern="[A-Z,a-z, ]*">
+                                    <label class="mdl-textfield__label" for="search">Search...</label>
+                                    <span class="mdl-textfield__error">Letters and spaces only</span>
+                                </div>
+                                <button data-bind="click:gatherPlacesData" id="button-search" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                                    Let's Go
+                                </button>
+                            </form>
+                        </div>
+                        <div class="places-content" data-bind="foreach: arrayPlaces, visible: isSearchContentValid()">
+                            <div data-bind="click: $root.clickSelectPlace, css : { selectedItem: $data == $root.selectedPlace() }"
+                                class="place-detail">
+                                <div class="place-image">
+                                    <img data-bind="attr:{src:placeImage, width:64, height:64}" src="" alt="">
+                                </div>
+                                <div class="place-data">
+                                    <div class="place-name">
+                                        <span data-bind="text: placeName"></span>
+                                    </div>
+                                    <div class="place-type">
+                                        <span data-bind="text: placeType"></span>
+                                    </div>
+                                    <div class="place-rating">
+                                        <span data-bind="starRating: placeRating"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div aria-live="assertive" aria-atomic="true" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar">
+                <div class="mdl-snackbar__text"></div>
+                <button type="button" class="mdl-snackbar__action"></button>
+            </div>
         </main>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
