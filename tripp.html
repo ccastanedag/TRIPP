@@ -166,10 +166,10 @@
                             </div>
                         </div>
                         <div class="favorite-footer">
-                            <button data-bind="visible:city() === undefined" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            <button data-bind="visible:city() === undefined, click:changePageTo.bind($data,'Home')" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                                 Back to Home
                             </button>
-                            <button data-bind="visible:city() !== undefined" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            <button data-bind="visible:city() !== undefined, click:changePageTo.bind($data,'Map')" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                                 Back to <span style="font-weight:bold" data-bind="text:city"></span>
                             </button>
 
