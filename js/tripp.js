@@ -31,7 +31,7 @@ var Place = function (data) {
 
 var FavoritePlace = function (data) {
     this.destination = data.destination;
-    this.places = data.places;// This will be a SET of Places instances
+    this.places = data.places;// This will be an array of Places instances
 }
 
 var TrippViewModel = function () {
@@ -46,6 +46,7 @@ var TrippViewModel = function () {
     self.currentPage = ko.observable('Home');
     self.city = ko.observable();
     self.country = ko.observable();
+    self.showFavoritesButton = ko.observable(false);
     self.destination = ko.pureComputed(function () {
         return `${self.city()}, ${self.country()}`;
     });
@@ -55,6 +56,8 @@ var TrippViewModel = function () {
     self.isSearchContentValid = ko.observable(false);
 
     self.changePageTo = function (page) {
+        if (page === "Home")
+            window.location.reload();
         self.currentPage(page);
     };
 
@@ -167,14 +170,17 @@ var TrippViewModel = function () {
             actionText: 'Undo',
             timeout: 4000
         };
-       
+
+        // To update the render state of the Favorites Button
+        if (self.showFavoritesButton() === false) {
+            self.showFavoritesButton(true);
+        }
 
         // If localStorage is empty
         if (localStorage.length === 0) {
             dummyPlaces.push(selfSelectedPlace.returnAsObject());
             localStorage.setItem(selfDestination, JSON.stringify(dummyPlaces));
             notification.MaterialSnackbar.showSnackbar(data);
-
         } else {
             // If destination (Eg: Lima, Perú) exist already as key within localStorage
             if (destinationData !== null) {
@@ -200,6 +206,34 @@ var TrippViewModel = function () {
             }
         }
     }
+
+    // Render Favorites Button if localStorage have values
+    self.renderFavoritesButton = function () {
+        if (localStorage.length !== 0) {
+            self.showFavoritesButton(true);
+        }
+    };
+
+    self.createRenderStructure = function () {
+        self.setFavoritesPlaces.removeAll();
+        for (let index = 0; index < localStorage.length; index++) {
+            let tempPlaces = [], dummyPlaces = [];
+            let dummyDestination = localStorage.key(index);
+            tempPlaces = JSON.parse(localStorage.getItem(localStorage.key(index)));
+            for (let index2 = 0; index2 < tempPlaces.length; index2++) {
+                let dummyPlace = new Place(tempPlaces[index2]);
+                dummyPlaces.push(dummyPlace);
+            }
+            let objFavoritePlace = {
+                destination: dummyDestination,
+                places: dummyPlaces
+            }
+            let dummyFavoritePlace = new FavoritePlace(objFavoritePlace);
+            self.setFavoritesPlaces.push(dummyFavoritePlace);
+        }
+    };
+
+    self.renderFavoritesButton();
 };
 
 //=============================== KNOCKOUT  ========================
@@ -234,6 +268,13 @@ var toProperCase = function (text) {
 // Add To Favorites (works as bridge function between infoWindow DOM and ViewModel)
 var addToFavorites = function () {
     TripViewModelInstance.addToFavorites();
+};
+
+// Init render of Favorites Page
+var showFavorites = function () {
+    TripViewModelInstance.changePageTo('Favorites');
+    // Create the render logic structure
+    TripViewModelInstance.createRenderStructure();
 };
 
 // Search an element inside iterable using attribute as criteria

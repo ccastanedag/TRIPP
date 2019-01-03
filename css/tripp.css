@@ -171,6 +171,7 @@
 
 .place-data {
     margin-left : 0.5em;
+    flex:1;
 }
 
 .selectedItem {
@@ -330,3 +331,82 @@
 }
 
 /* ================== MEDIAQUERIES - Desktop - End =================*/
+
+/*=======================================================================*/
+/*==================     FAVORITES PAGE STYLING      ====================*/
+/*=======================================================================*/
+.favorite-place-destination-content{
+    height: 3.5em;
+    background-color: #673ab7;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+
+    display: flex;
+    align-items:center;
+}
+
+.favorite-place-content{
+   /* width: 95%; */
+}
+
+.favorite-place-destination {
+    flex : 1;
+    margin-left: 1em;
+}
+
+.delete-all-content , .view-all-content {
+    width: 45px;
+    cursor: pointer;
+}
+
+.favorite-place-destination-content:first-child {
+    margin-top: 1em;
+}
+
+.white {
+    color: white;
+}
+
+.purple {
+    color: #673ab7;
+}
+
+.delete-all-content, .view-all-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.delete-all-content:hover div, .view-all-content:hover div {
+    color : rgb(255,64,129);
+}
+
+.favorite-place {
+    display: flex;
+}
+
+.favorite-place div:first-child{
+    flex:1;
+}
+
+.favorite-place .delete-all-content{
+    align-self: center;
+    width: 45px;
+   
+}
+
+.big {
+    font-size : 1.5em;
+}
+
+.small {
+    font-size : 1.2em;
+}
+
+.favorite-footer {
+    margin: 1em;
+}

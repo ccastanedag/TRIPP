@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.deep_purple-pink.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
     <link rel="stylesheet" href="css/tripp.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+        crossorigin="anonymous">
     <title>TRIPP</title>
 </head>
 
@@ -27,7 +29,8 @@
                 <div class="mdl-layout-spacer"></div>
                 <!-- Navigation. We hide it in small screens. -->
                 <nav class="mdl-navigation mdl-layout--large-screen-only">
-                    <a class="mdl-navigation__link" href="">Favorites</a>
+                    <!-- <a class="mdl-navigation__link" href="">Favorites</a> -->
+                    <button data-bind="visible:showFavoritesButton()" onclick="showFavorites()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Favorites</button>
                     <a class="mdl-navigation__link" href="">About TRIPP</a>
                 </nav>
             </div>
@@ -35,7 +38,8 @@
         <div class="mdl-layout__drawer mdl-layout--small-screen-only">
             <span class="mdl-layout-title">TRIPP</span>
             <nav class="mdl-navigation">
-                <a class="mdl-navigation__link" href="">Favorites</a>
+                <!-- <a class="mdl-navigation__link" href="">Favorites</a> -->
+                <a class="mdl-navigation__link" data-bind="visible:showFavoritesButton()" onclick="showFavorites()">Favorites</a>
                 <a class="mdl-navigation__link" href="">About TRIPP</a>
             </nav>
         </div>
@@ -53,11 +57,11 @@
                     <form autocomplete="off" action="#" id="form-home">
                         <div class="mdl-textfield mdl-js-textfield">
                             <input class="mdl-textfield__input" type="text" id="city">
-                            <label class="mdl-textfield__label" for="city">City... (Eg: Miami)</label>
+                            <label class="mdl-textfield__label" for="city">City... (Eg: Tokio)</label>
                         </div>
                         <div class="mdl-textfield mdl-js-textfield">
                             <input class="mdl-textfield__input" type="text" id="country">
-                            <label class="mdl-textfield__label" for="country">Country... (Eg: USA)</label>
+                            <label class="mdl-textfield__label" for="country">Country... (Eg: Japan)</label>
                         </div>
                         <!-- Accent-colored raised button with ripple -->
                         <button data-bind="click:codeAddress" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
@@ -67,11 +71,11 @@
                 </div>
             </div>
 
-            <div data-bind="visible: currentPage() === 'Map'" class="page-content">
+            <div data-bind="visible: currentPage() !== 'Home'" class="page-content">
                 <div class="map-content">
 
                 </div>
-                <div class="places-info ">
+                <div data-bind="visible: currentPage() === 'Map'" class="places-info ">
                     <div class="places-info-content mdl-shadow--2dp through mdl-shadow--16dp">
                         <div class="country-content">
                             <div data-bind="text:destination" class="country"></div>
@@ -113,50 +117,62 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div data-bind="visible:currentPage === 'Favorites'" class="favorites-content">
-                <div class="map-content">
-
-                </div>
-                <div class="places-info ">
+                <div data-bind="visible: currentPage() === 'Favorites'" class="places-info ">
                     <div class="places-info-content mdl-shadow--2dp through mdl-shadow--16dp">
                         <div class="country-content">
                             <div class="country">Favorites</div>
                         </div>
-                        <div class="search-content">
-                            <p data-bind="visible:isSearchContentValid() === false" class="explanation-text"><strong>TRIPP</strong>
-                                allows you to search places like cafeterias, bars, hotels, etc and save them to your
-                                favorites list. Try it!</p>
-                            <!-- Search Form  -->
-                            <form autocomplete="off" action="#" id="form-search" class="form-search flex-column">
-                                <div id="div-search" class="mdl-textfield mdl-js-textfield">
-                                    <input class="mdl-textfield__input" type="text" id="input-search" pattern="[A-Z,a-z, ]*">
-                                    <label class="mdl-textfield__label" for="search">Search...</label>
-                                    <span class="mdl-textfield__error">Letters and spaces only</span>
-                                </div>
-                                <button data-bind="click:gatherPlacesData" id="button-search" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                                    Let's Go
-                                </button>
-                            </form>
-                        </div>
-                        <div class="places-content" data-bind="foreach: arrayPlaces, visible: isSearchContentValid()">
-                            <div data-bind="click: $root.clickSelectPlace, css : { selectedItem: $data == $root.selectedPlace() }"
-                                class="place-detail">
-                                <div class="place-image">
-                                    <img data-bind="attr:{src:placeImage, width:64, height:64}" src="" alt="">
-                                </div>
-                                <div class="place-data">
-                                    <div class="place-name">
-                                        <span data-bind="text: placeName"></span>
+                        <div class="places-content" data-bind="foreach:setFavoritesPlaces">
+                            <div class="favorite-place-content mdl-shadow--2dp through mdl-shadow--16dp">
+                                <div class="favorite-place-destination-content">
+                                    <div class="favorite-place-destination white" data-bind="text:destination">
+
                                     </div>
-                                    <div class="place-type">
-                                        <span data-bind="text: placeType"></span>
+                                    <div class="delete-all-content">
+                                        <div class="fas fa-trash-alt big white"></div>
                                     </div>
-                                    <div class="place-rating">
-                                        <span data-bind="starRating: placeRating"></span>
+                                    <!-- 
+                                    <div class="view-all-content">
+                                        <div class="far fa-eye white"></div>
+                                        <div class="white">All</div>
+                                    </div> -->
+                                </div>
+                                <div class="favorite-place-places" data-bind="foreach:places">
+                                    <div class="place-detail">
+                                        <div class="place-image">
+                                            <img data-bind="attr:{src:placeImage, width:64, height:64}" src="" alt="">
+                                        </div>
+                                        <div class="place-data">
+                                            <div class="place-name">
+                                                <span data-bind="text: placeName"></span>
+                                            </div>
+                                            <div class="favorite-place">
+                                                <div>
+                                                    <div class="place-type">
+                                                        <span data-bind="text: placeType"></span>
+                                                    </div>
+                                                    <div class="place-rating">
+                                                        <span data-bind="starRating: placeRating"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="delete-all-content" data-bind="if:$parent.places.length !== 1">
+                                                    <div class="fas fa-trash-alt small purple"></div>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="favorite-footer">
+                            <button data-bind="visible:city() === undefined" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                                Back to Home
+                            </button>
+                            <button data-bind="visible:city() !== undefined" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                                Back to <span style="font-weight:bold" data-bind="text:city"></span>
+                            </button>
+
                         </div>
                     </div>
                 </div>
