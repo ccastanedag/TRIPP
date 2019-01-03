@@ -235,6 +235,11 @@ var TrippViewModel = function () {
         // Delete Favorite Place from localStorage
         localStorage.removeItem(favoritePlace.destination)
 
+        // To update the render state of the Favorite Button
+        if (localStorage.length === 0) {
+            self.showFavoritesButton(false);
+        }
+
         // Delete Favorite Place from render structure
         self.setFavoritesPlaces.remove(favoritePlace);
     };
