@@ -358,7 +358,7 @@
     margin-left: 1em;
 }
 
-.delete-all-content , .view-all-content {
+.fa-trash-alt {
     width: 45px;
     cursor: pointer;
 }
@@ -381,7 +381,7 @@
     align-items: center;
 }
 
-.delete-all-content:hover div, .view-all-content:hover div {
+.fa-trash-alt:hover {
     color : rgb(255,64,129);
 }
 

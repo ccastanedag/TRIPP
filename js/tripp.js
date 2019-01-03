@@ -31,7 +31,7 @@ var Place = function (data) {
 
 var FavoritePlace = function (data) {
     this.destination = data.destination;
-    this.places = data.places;// This will be an array of Places instances
+    this.places = ko.observableArray(data.places);// This will be an array of Places instances
 }
 
 var TrippViewModel = function () {
@@ -166,8 +166,6 @@ var TrippViewModel = function () {
         let notification = document.querySelector('.mdl-js-snackbar');
         let data = {
             message: 'The place has successfully added to Favorites',
-            actionHandler: function (event) { },
-            actionText: 'Undo',
             timeout: 4000
         };
 
@@ -231,6 +229,31 @@ var TrippViewModel = function () {
             let dummyFavoritePlace = new FavoritePlace(objFavoritePlace);
             self.setFavoritesPlaces.push(dummyFavoritePlace);
         }
+    };
+
+    self.deleteFavoritePlace = function (favoritePlace) {
+        // Delete Favorite Place from localStorage
+        localStorage.removeItem(favoritePlace.destination)
+
+        // Delete Favorite Place from render structure
+        self.setFavoritesPlaces.remove(favoritePlace);
+    };
+
+    self.deletePlace = function (favoritePlace, place, evt) {
+        //Delete Place from localStorage
+        let destination = favoritePlace.destination;
+        let places = JSON.parse(localStorage.getItem(destination));
+        for (let index = 0; index < places.length; index++) {
+           if (places[index].placeId === place.placeId)
+           {
+               places.splice(index,1);
+           }  
+        }
+
+        localStorage.setItem(destination,JSON.stringify(places));
+
+        // Delete Place from render structure (Knockout will handle this)
+        favoritePlace.places.remove(place);
     };
 
     self.renderFavoritesButton();

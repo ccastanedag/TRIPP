@@ -129,7 +129,7 @@
 
                                     </div>
                                     <div class="delete-all-content">
-                                        <div class="fas fa-trash-alt big white"></div>
+                                        <div class="fas fa-trash-alt big white" data-bind="click:$root.deleteFavoritePlace"></div>
                                     </div>
                                     <!-- 
                                     <div class="view-all-content">
@@ -155,8 +155,8 @@
                                                         <span data-bind="starRating: placeRating"></span>
                                                     </div>
                                                 </div>
-                                                <div class="delete-all-content" data-bind="if:$parent.places.length !== 1">
-                                                    <div class="fas fa-trash-alt small purple"></div>
+                                                <div class="delete-all-content" data-bind="if:$parent.places().length !== 1">
+                                                    <div class="fas fa-trash-alt small purple" data-bind="click:$root.deletePlace.bind($data,$parent)"></div>
                                                 </div>
                                             </div>
 
