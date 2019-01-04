@@ -15,8 +15,8 @@ var Place = function (data) {
         this.formattedAddress = result.formatted_address;
         this.formattedPhoneNumber = result.formatted_phone_number;
         this.website = result.website;
-        this.photos = result.photos;
     };
+
     this.returnAsObject = function () {
         let obj = {
             placeId: this.placeId,
@@ -27,7 +27,6 @@ var Place = function (data) {
             formatted_address: this.formattedAddress,
             formatted_phone_number: this.formattedPhoneNumber,
             website: this.website,
-            photos: this.photos,
             lat: this.marker.position.lat(),
             lng: this.marker.position.lng()
         };
@@ -161,9 +160,8 @@ var TrippViewModel = function () {
             if (styledMap.zoom !== 15) {
                 styledMap.setZoom(15);
             }
-            // Load the detail data & render a proper infoWindow
-            // TODO - Delete photos from code
-            renderInfoWindow(place.returnAsObject(),place.marker);
+            // Render a proper infoWindow
+            renderInfoWindow(place);
         }
     }
 
@@ -196,15 +194,14 @@ var TrippViewModel = function () {
                     'type',
                     'formatted_address',
                     'formatted_phone_number',
-                    'website',
-                    'photos'
+                    'website'
                 ]
             };
             let placeDetailService = new google.maps.places.PlacesService(styledMap);
             placeDetailService.getDetails(placeDetailRequest, callBackPlaceDetail);
         } else {
             // Send the object data saved on the MAP to be rendered
-            renderInfoWindow(self.exploredPlacesMap.get(place.placeId), place.marker);
+            renderInfoWindow(self.exploredPlacesMap.get(place.placeId));
         }
     }
 
@@ -273,7 +270,7 @@ var TrippViewModel = function () {
             tempPlaces = JSON.parse(localStorage.getItem(localStorage.key(index)));
             for (let index2 = 0; index2 < tempPlaces.length; index2++) {
                 let dummyPlace = new Place(tempPlaces[index2]);
-
+                dummyPlace.addDetailData(tempPlaces[index2]); // We have to add detail data because the constructor doesnt send this info to the instance
                 let marker = new google.maps.Marker({
                     position: { lat: dummyPlace.lat, lng: dummyPlace.lng },
                     title: dummyPlace.placeName,
@@ -442,18 +439,18 @@ var stylingSearchForm = function () {
     }
 }
 
-function renderInfoWindow(objectData, mapMarker) {
+function renderInfoWindow(instancePlace) {
 
     TripViewModelInstance.infoWindow.setContent("");
     TripViewModelInstance.infoWindow.close();
 
     // Destructuring of objectData 
-    let { name,
-        rating,
-        formatted_address,
-        formatted_phone_number,
+    let { placeName,
+        placeRating,
+        formattedAddress,
+        formattedPhoneNumber,
         website,
-        photos } = objectData;
+        placeImage } = instancePlace;
 
     // If place doesn't have a website, the DOM should be diferent (only Add To Favorite)
     let infoWindowsButton;
@@ -484,7 +481,7 @@ function renderInfoWindow(objectData, mapMarker) {
 
     // This code allow to render the stars rating within the infoWindow
     let infoWindowRating = $('<div></div>').wrap('<p></p>').rateYo({
-        rating: rating,
+        rating: placeRating,
         readOnly: true,
         starWidth: '20px',
         normalFill: '#c8c8c8ff',
@@ -493,8 +490,8 @@ function renderInfoWindow(objectData, mapMarker) {
 
     // if place does/doesn't have phone, render the proper DOM
     let infoWindowPhone;
-    if (formatted_phone_number !== undefined) {
-        infoWindowPhone = `${formatted_phone_number}`;
+    if (formattedPhoneNumber !== undefined) {
+        infoWindowPhone = `${formattedPhoneNumber}`;
     } else {
         infoWindowPhone = `-`;
     }
@@ -504,16 +501,16 @@ function renderInfoWindow(objectData, mapMarker) {
         `<div class="info-window-content">
 
         <div class="info-window-data-content">
-            <div class="info-window-data-name">${name}</div>
+            <div class="info-window-data-name">${placeName}</div>
             <div class="info-window-data-rating">${infoWindowRating}</div>
             <div class="info-window-middle">
                 <div class="info-window-image-content">
-                    <img src="${photos[0].getUrl()}" alt="">
+                    <img src="${placeImage}" alt="">
                 </div>
                 <div>
                     <div class="info-window-data-address">
                         <p class="info-window-label">Address:</p>
-                        <p class="info-window-data">${formatted_address}</p>
+                        <p class="info-window-data">${formattedAddress}</p>
                     </div>
                     <div class="info-window-data-phone">
                         <p class="info-window-label">Phone:</p>
@@ -534,7 +531,7 @@ function renderInfoWindow(objectData, mapMarker) {
     `;
 
     TripViewModelInstance.infoWindow.setContent(infoWindowContent);
-    TripViewModelInstance.infoWindow.open(styledMap, mapMarker);
+    TripViewModelInstance.infoWindow.open(styledMap, instancePlace.marker);
 
 
 }
@@ -639,8 +636,9 @@ function callBackPlaceDetail(result, status) {
         case google.maps.places.PlacesServiceStatus.OK:
             // Fill the details data obtained for the selectedPlace
             TripViewModelInstance.selectedPlace().addDetailData(result);
-            TripViewModelInstance.exploredPlacesMap.set(result.place_id, result);
-            renderInfoWindow(result, TripViewModelInstance.selectedPlace().marker);
+            console.log(TripViewModelInstance.selectedPlace());
+            TripViewModelInstance.exploredPlacesMap.set(result.place_id, TripViewModelInstance.selectedPlace());
+            renderInfoWindow(TripViewModelInstance.selectedPlace());
 
             break;
         case google.maps.places.PlacesServiceStatus.ZERO_RESULTS:
