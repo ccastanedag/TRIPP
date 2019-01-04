@@ -7,6 +7,10 @@ var Place = function (data) {
     this.placeRating = data.rating;
     this.placeImage = data.image;
     this.marker = data.marker;
+
+    this.lat = data.lat; // This data is set when crete the Render Structure from localStorage, not from Places API
+    this.lng = data.lng; // This data is set when crete the Render Structure from localStorage, not from Places API
+
     this.addDetailData = function (result) {
         this.formattedAddress = result.formatted_address;
         this.formattedPhoneNumber = result.formatted_phone_number;
@@ -23,7 +27,9 @@ var Place = function (data) {
             formatted_address: this.formattedAddress,
             formatted_phone_number: this.formattedPhoneNumber,
             website: this.website,
-            photos: this.photos
+            photos: this.photos,
+            lat: this.marker.position.lat(),
+            lng: this.marker.position.lng()
         };
         return obj;
     };
@@ -40,6 +46,7 @@ var TrippViewModel = function () {
     self.width = $('header').width();
     self.arrayPlaces = ko.observableArray();
     self.selectedPlace = ko.observable();
+    self.selectedFavoritePlace = ko.observable(); //WATCH OUT!: This represent a place from the favorite page, this is not a whole FavoritePlace instance
     self.arrayMarkers = [];
     self.infoWindow = new google.maps.InfoWindow();
     self.exploredPlacesMap = new Map();
@@ -56,9 +63,33 @@ var TrippViewModel = function () {
     self.isSearchContentValid = ko.observable(false);
 
     self.changePageTo = function (page) {
-        if (page === "Home")
+        if (page === "Home") {
             window.location.reload();
-        self.currentPage(page);
+        }
+        else {
+            if (page === "Favorites") {
+                if (self.currentPage() !== "Favorites") {
+                    self.currentPage(page);
+
+                    // Delete previous markers from Map Page if isSearchIsValid () TRUE
+                    if (self.isSearchContentValid() === true) {
+                        self.arrayMarkers.forEach(function (element) {
+                            element.setMap(null);
+                        });
+                    }
+
+                    // Create the render logic structure
+                    self.createRenderStructure();
+
+                    // Select the first Place in FavoritePlace
+                    self.clickSelectFavoritePlace(self.setFavoritesPlaces()[0], self.setFavoritesPlaces()[0].places()[0]);
+                }
+            } else // Map
+            {
+                self.currentPage(page);
+            }
+        }
+
     };
 
     // Center the Map to City, Country
@@ -113,6 +144,28 @@ var TrippViewModel = function () {
         }
 
     };
+
+    // This function select a Place in the Favorite List (pink) and render all markers from FavoritePlace.places
+    // And also render the infoWindow with the data of the selected place
+    self.clickSelectFavoritePlace = function (favoritePlace, place) {
+        let oldFavoritePlace = self.selectedFavoritePlace();
+
+        if (oldFavoritePlace !== place) {
+            if (oldFavoritePlace !== undefined)
+                oldFavoritePlace.marker.setAnimation(-1);
+
+            self.selectedFavoritePlace(place);
+            self.selectedFavoritePlace().marker.setAnimation(google.maps.Animation.BOUNCE);
+            // Center the map to selectedFavoritePlace and zoom
+            styledMap.panTo(self.selectedFavoritePlace().marker.getPosition());
+            if (styledMap.zoom !== 15) {
+                styledMap.setZoom(15);
+            }
+            // Load the detail data & render a proper infoWindow
+            // TODO - Delete photos from code
+            renderInfoWindow(place.returnAsObject(),place.marker);
+        }
+    }
 
     // This procedure search and select the proper place from
     // the places list when a map marker is clicked
@@ -220,6 +273,15 @@ var TrippViewModel = function () {
             tempPlaces = JSON.parse(localStorage.getItem(localStorage.key(index)));
             for (let index2 = 0; index2 < tempPlaces.length; index2++) {
                 let dummyPlace = new Place(tempPlaces[index2]);
+
+                let marker = new google.maps.Marker({
+                    position: { lat: dummyPlace.lat, lng: dummyPlace.lng },
+                    title: dummyPlace.placeName,
+                    map: styledMap,
+                    icon: 'img/map-marker.png'
+                });
+                dummyPlace.marker = marker;
+
                 dummyPlaces.push(dummyPlace);
             }
             let objFavoritePlace = {
@@ -240,25 +302,44 @@ var TrippViewModel = function () {
             self.showFavoritesButton(false);
         }
 
+        // Delete the all markers
+        for (const iterator of favoritePlace.places()) {
+            iterator.marker.setMap(null);
+        }
+
         // Delete Favorite Place from render structure
         self.setFavoritesPlaces.remove(favoritePlace);
+
+        // Select the first place of the new first FavoritePlace
+        if (self.setFavoritesPlaces().length !== 0) {
+            self.clickSelectFavoritePlace(self.setFavoritesPlaces()[0], self.setFavoritesPlaces()[0].places()[0]);
+        } else {
+            // TODO : Redirect back to Home or City (if isSearchContentValid() === TRUE)
+        }
     };
 
-    self.deletePlace = function (favoritePlace, place, evt) {
+    self.deletePlace = function (favoritePlace, place) {
         //Delete Place from localStorage
         let destination = favoritePlace.destination;
         let places = JSON.parse(localStorage.getItem(destination));
         for (let index = 0; index < places.length; index++) {
-           if (places[index].placeId === place.placeId)
-           {
-               places.splice(index,1);
-           }  
+            if (places[index].placeId === place.placeId) {
+                places.splice(index, 1);
+            }
         }
 
-        localStorage.setItem(destination,JSON.stringify(places));
+        localStorage.setItem(destination, JSON.stringify(places));
+
+        // Delete the marker from map
+        place.marker.setMap(null);
 
         // Delete Place from render structure (Knockout will handle this)
         favoritePlace.places.remove(place);
+
+        if (place === self.selectedFavoritePlace()) {
+            self.clickSelectFavoritePlace(favoritePlace, favoritePlace.places()[0]);
+        }
+
     };
 
     self.renderFavoritesButton();
@@ -301,8 +382,6 @@ var addToFavorites = function () {
 // Init render of Favorites Page
 var showFavorites = function () {
     TripViewModelInstance.changePageTo('Favorites');
-    // Create the render logic structure
-    TripViewModelInstance.createRenderStructure();
 };
 
 // Search an element inside iterable using attribute as criteria

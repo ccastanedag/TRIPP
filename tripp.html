@@ -138,7 +138,7 @@
                                     </div> -->
                                 </div>
                                 <div class="favorite-place-places" data-bind="foreach:places">
-                                    <div class="place-detail">
+                                    <div class="place-detail" data-bind="click:$root.clickSelectFavoritePlace.bind($data,$parent), css : { selectedItem: $data == $root.selectedFavoritePlace() }">
                                         <div class="place-image">
                                             <img data-bind="attr:{src:placeImage, width:64, height:64}" src="" alt="">
                                         </div>
