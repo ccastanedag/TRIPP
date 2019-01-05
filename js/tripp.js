@@ -181,6 +181,25 @@ var TrippViewModel = function () {
         }
     };
 
+    // This procedure search and select the proper place from
+    // the FavoritePlace list when a map marker is clicked
+    self.getFavoritePlaceFromMarker = function (marker) {
+        for (const favoritePlace of self.setFavoritesPlaces()) {
+            for (const place of favoritePlace.places()) {
+                if (place.marker === marker) {
+
+                    self.clickSelectFavoritePlace(favoritePlace, place);
+
+                    // Scroll-Y the Favorite List (.places-content) to the selected item
+                    let target = document.getElementsByClassName('selectedItem')[0];
+                    let container = document.getElementsByClassName('places-content')[1];
+                    scrollIfNeeded(target, container);
+
+                }
+            }
+        }
+    };
+
     self.loadPlaceDetailData = function (place) {
         // If the selected place hasn't been selected before, then load data from Place Detail
         // (This help us to reduce unnecessary requests to Google Places API)
@@ -277,6 +296,18 @@ var TrippViewModel = function () {
                     map: styledMap,
                     icon: 'img/map-marker.png'
                 });
+
+                // Add Click Event Listener, so when user click a marker the infoWindow Appear and select the proper Place from Favorite List
+                marker.addListener('click', function () {
+                    // When a marker is clicked, the proper Place is selected on the Favorite List
+                    // TODO: Delete the implementation of this procedure
+
+                    self.getFavoritePlaceFromMarker(this);
+
+                    // This show the infoWindow even when the user have closed previously
+                    self.infoWindow.open(styledMap, this);
+                });
+
                 dummyPlace.marker = marker;
 
                 dummyPlaces.push(dummyPlace);
@@ -536,6 +567,19 @@ function renderInfoWindow(instancePlace) {
 
 }
 
+function scrollIfNeeded(element, container) {
+
+    if (element.offsetTop < container.scrollTop) {
+       container.scrollTop = element.offsetTop;
+    } else {
+        const offsetBottom = element.offsetTop + element.offsetHeight;
+        const scrollBottom = container.scrollTop + container.offsetHeight;
+        if (offsetBottom > scrollBottom) {
+            container.scrollTop = offsetBottom - container.offsetHeight;
+        }
+    }
+}
+
 //=============================== CALLBACK FUNCTIONS ========================
 
 // Callback function to execute when "placesService.textSearch" (Google Places API) is called
@@ -636,7 +680,6 @@ function callBackPlaceDetail(result, status) {
         case google.maps.places.PlacesServiceStatus.OK:
             // Fill the details data obtained for the selectedPlace
             TripViewModelInstance.selectedPlace().addDetailData(result);
-            console.log(TripViewModelInstance.selectedPlace());
             TripViewModelInstance.exploredPlacesMap.set(result.place_id, TripViewModelInstance.selectedPlace());
             renderInfoWindow(TripViewModelInstance.selectedPlace());
 
