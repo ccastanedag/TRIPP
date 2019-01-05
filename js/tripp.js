@@ -570,16 +570,24 @@ function renderInfoWindow(instancePlace) {
 function scrollIfNeeded(element, container) {
 
     if (element.offsetTop < container.scrollTop) {
-       container.scrollTop = element.offsetTop;
+       animateScroll(container.scrollTop,element.offsetTop,container);
     } else {
         const offsetBottom = element.offsetTop + element.offsetHeight;
         const scrollBottom = container.scrollTop + container.offsetHeight;
         if (offsetBottom > scrollBottom) {
-            container.scrollTop = offsetBottom - container.offsetHeight;
+            animateScroll(container.scrollTop,offsetBottom - container.offsetHeight,container);
         }
     }
 }
 
+function animateScroll(startValue, endValue, container){
+    $({ n: startValue }).animate({ n: endValue}, {
+        duration: 350,
+        step: function(now, fx) {
+           container.scrollTop = now;
+        }
+    });
+}
 //=============================== CALLBACK FUNCTIONS ========================
 
 // Callback function to execute when "placesService.textSearch" (Google Places API) is called
