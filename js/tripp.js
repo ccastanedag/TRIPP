@@ -171,11 +171,14 @@ var TrippViewModel = function () {
         for (const place of self.arrayPlaces()) {
             if (place.marker === marker) {
                 if (self.selectedPlace() !== place) {
-                    $('.places-content').scrollTop($(".selectedItem").position().top);
+
                     self.clickSelectPlace(place);
-                    $('.places-content').animate({
-                        scrollTop: $(".selectedItem").position().top
-                    }, 350);
+
+                    let target = document.getElementsByClassName('selectedItem')[0];
+                    let container = document.getElementsByClassName('places-content')[0];
+                    
+                    // Scroll-Y the (.places-content) to the selected item
+                    scrollIfNeeded(target,container);
                 }
             }
         }
@@ -190,11 +193,11 @@ var TrippViewModel = function () {
 
                     self.clickSelectFavoritePlace(favoritePlace, place);
 
-                    // Scroll-Y the Favorite List (.places-content) to the selected item
                     let target = document.getElementsByClassName('selectedItem')[0];
                     let container = document.getElementsByClassName('places-content')[1];
-                    scrollIfNeeded(target, container);
 
+                    // Scroll-Y the Favorite List (.places-content) to the selected item
+                    scrollIfNeeded(target, container);
                 }
             }
         }
