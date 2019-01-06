@@ -112,7 +112,7 @@ var TrippViewModel = function () {
                         styledMap.setZoom(15);
 
                     }else{ // if city was defined but no search (eg: hotel) was made
-                        if(self.city !== undefined)
+                        if(self.city() !== undefined)
                         {
                             styledMap.setCenter(self.latlng);
                             styledMap.setZoom(15);
@@ -405,6 +405,15 @@ var TrippViewModel = function () {
             self.clickSelectFavoritePlace(self.setFavoritesPlaces()[0], self.setFavoritesPlaces()[0].places()[0]);
         } else {
             // TODO : Redirect back to Home or City (if isSearchContentValid() === TRUE)
+           
+            if(self.city() !== undefined)
+            {
+                $(".back-to-city").click();
+            }else{
+                $(".back-to-home").click();
+            }
+            
+            
         }
     };
 
