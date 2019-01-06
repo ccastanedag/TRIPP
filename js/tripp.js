@@ -45,8 +45,10 @@ var TrippViewModel = function () {
     self.width = $('header').width();
     self.arrayPlaces = ko.observableArray();
     self.selectedPlace = ko.observable();
+    self.lastSelectedPlace; // store the selected place from Map page at the moment the user click on Favorites button
     self.selectedFavoritePlace = ko.observable(); //WATCH OUT!: This represent a place from the favorite page, this is not a whole FavoritePlace instance
     self.arrayMarkers = [];
+    self.arrayFavoriteMarkers = [];
     self.infoWindow = new google.maps.InfoWindow();
     self.exploredPlacesMap = new Map();
     self.currentPage = ko.observable('Home');
@@ -57,35 +59,70 @@ var TrippViewModel = function () {
         return `${self.city()}, ${self.country()}`;
     });
     self.setFavoritesPlaces = ko.observableArray(); // Gives the structure to render the data of Favorites
+    self.latlng; // store the center of the map or the lasSelectedPlace position. When user click Favorites button
 
     // When response from Google Places API is OK, value is TRUE 
     self.isSearchContentValid = ko.observable(false);
 
     self.changePageTo = function (page) {
-        if (page === "Home") {
+        if (page === "Home") { // (Want to go to HOME)
             window.location.reload();
         }
         else {
-            if (page === "Favorites") {
+            if (page === "Favorites") { // (Want to go to FAVORITES)
                 if (self.currentPage() !== "Favorites") {
                     self.currentPage(page);
 
-                    // Delete previous markers from Map Page if isSearchIsValid () TRUE
+                    
                     if (self.isSearchContentValid() === true) {
+                        // Hide/Erase visually previous markers from Map Page if isSearchIsValid () TRUE
                         self.arrayMarkers.forEach(function (element) {
                             element.setMap(null);
                         });
+                        self.lastSelectedPlace = self.selectedPlace();
                     }
-
+                    
                     // Create the render logic structure
                     self.createRenderStructure();
 
                     // Select the first Place in FavoritePlace
                     self.clickSelectFavoritePlace(self.setFavoritesPlaces()[0], self.setFavoritesPlaces()[0].places()[0]);
                 }
-            } else // Map
+            } else // (Want to go to MAP)
             {
-                self.currentPage(page);
+                if (self.currentPage() === "Favorites") { // (if previous was FAVORITES)
+                    // Hide/Erase visually previous markers from Favorite Page
+
+                    self.arrayFavoriteMarkers.forEach(function (element) {
+                        element.setMap(null);
+                    });
+
+                    // Load the arrayMarkers (map markers) into the map
+                    self.arrayMarkers.forEach(function (element) {
+                        element.setMap(styledMap);
+                    });
+
+                    self.currentPage(page);
+
+                    // Logic to reposition the MAP center on Map page
+                    if(self.isSearchContentValid() === true) // is a valid search was made
+                    {
+                        self.selectedPlace(undefined);
+                        self.clickSelectPlace(self.lastSelectedPlace);
+                        styledMap.setZoom(15);
+
+                    }else{ // if city was defined but no search (eg: hotel) was made
+                        if(self.city !== undefined)
+                        {
+                            styledMap.setCenter(self.latlng);
+                            styledMap.setZoom(15);
+                        }
+                    }
+
+                } else { // (if previous was HOME)
+                    self.currentPage(page);
+                }
+
             }
         }
 
@@ -102,6 +139,7 @@ var TrippViewModel = function () {
             geocoder.geocode({ 'address': self.destination() }, function (results, status) {
                 if (status == 'OK') {
                     styledMap.setCenter(results[0].geometry.location);
+                    self.latlng = styledMap.getCenter();
                 } else {
                     alert('Geocode was not successful for the following reason: ' + status);
                 }
@@ -176,9 +214,9 @@ var TrippViewModel = function () {
 
                     let target = document.getElementsByClassName('selectedItem')[0];
                     let container = document.getElementsByClassName('places-content')[0];
-                    
+
                     // Scroll-Y the (.places-content) to the selected item
-                    scrollIfNeeded(target,container);
+                    scrollIfNeeded(target, container);
                 }
             }
         }
@@ -285,14 +323,25 @@ var TrippViewModel = function () {
     };
 
     self.createRenderStructure = function () {
+
+        // Empty the Render Structure inside setFavoritePlaces
         self.setFavoritesPlaces.removeAll();
+        // Empty the arrayFavoritesMarkers to avoid duplicates
+        emptyArray(self.arrayFavoriteMarkers);
+
         for (let index = 0; index < localStorage.length; index++) {
+
             let tempPlaces = [], dummyPlaces = [];
             let dummyDestination = localStorage.key(index);
+
             tempPlaces = JSON.parse(localStorage.getItem(localStorage.key(index)));
+
             for (let index2 = 0; index2 < tempPlaces.length; index2++) {
+
                 let dummyPlace = new Place(tempPlaces[index2]);
+
                 dummyPlace.addDetailData(tempPlaces[index2]); // We have to add detail data because the constructor doesnt send this info to the instance
+
                 let marker = new google.maps.Marker({
                     position: { lat: dummyPlace.lat, lng: dummyPlace.lng },
                     title: dummyPlace.placeName,
@@ -310,6 +359,9 @@ var TrippViewModel = function () {
                     // This show the infoWindow even when the user have closed previously
                     self.infoWindow.open(styledMap, this);
                 });
+
+                // Add the new created marker to arrayFavoriteMarker
+                self.arrayFavoriteMarkers.push(marker);
 
                 dummyPlace.marker = marker;
 
@@ -335,7 +387,14 @@ var TrippViewModel = function () {
 
         // Delete the all markers
         for (const iterator of favoritePlace.places()) {
-            iterator.marker.setMap(null);
+            iterator.marker.setMap(null); // Hide the marker visually from the map
+            // Delete the marker from arrayFavoriteMarkers
+            for (let index = 0; index < self.arrayFavoriteMarkers.length; index++) {
+                if (self.arrayFavoriteMarkers[index] === iterator.marker) {
+                    self.arrayFavoriteMarkers.splice(index, 1);
+                    break;
+                }
+            }
         }
 
         // Delete Favorite Place from render structure
@@ -362,7 +421,13 @@ var TrippViewModel = function () {
         localStorage.setItem(destination, JSON.stringify(places));
 
         // Delete the marker from map
-        place.marker.setMap(null);
+        for (let index = 0; index < self.arrayFavoriteMarkers.length; index++) {
+            if (self.arrayFavoriteMarkers[index] === place.marker) {
+                self.arrayFavoriteMarkers.splice(index, 1);
+                break;
+            }
+        }
+        place.marker.setMap(null); // Erase/Hide the marker visually from the map
 
         // Delete Place from render structure (Knockout will handle this)
         favoritePlace.places.remove(place);
@@ -573,23 +638,29 @@ function renderInfoWindow(instancePlace) {
 function scrollIfNeeded(element, container) {
 
     if (element.offsetTop < container.scrollTop) {
-       animateScroll(container.scrollTop,element.offsetTop,container);
+        animateScroll(container.scrollTop, element.offsetTop, container);
     } else {
         const offsetBottom = element.offsetTop + element.offsetHeight;
         const scrollBottom = container.scrollTop + container.offsetHeight;
         if (offsetBottom > scrollBottom) {
-            animateScroll(container.scrollTop,offsetBottom - container.offsetHeight,container);
+            animateScroll(container.scrollTop, offsetBottom - container.offsetHeight, container);
         }
     }
 }
 
-function animateScroll(startValue, endValue, container){
-    $({ n: startValue }).animate({ n: endValue}, {
+function animateScroll(startValue, endValue, container) {
+    $({ n: startValue }).animate({ n: endValue }, {
         duration: 350,
-        step: function(now, fx) {
-           container.scrollTop = now;
+        step: function (now, fx) {
+            container.scrollTop = now;
         }
     });
+}
+
+function emptyArray(arr) {
+    while (arr.length !== 0) {
+        arr.pop();
+    }
 }
 //=============================== CALLBACK FUNCTIONS ========================
 
@@ -612,6 +683,7 @@ function callBackPlaces(results, status) {
                 TripViewModelInstance.arrayMarkers.forEach(function (element) {
                     element.setMap(null);
                 });
+                emptyArray(TripViewModelInstance.arrayMarkers);
 
                 let maxCharactersName = TripViewModelInstance.width < 600 ? 30 : 22;
 
