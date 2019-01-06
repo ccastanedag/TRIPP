@@ -37,6 +37,7 @@ var Place = function (data) {
 var FavoritePlace = function (data) {
     this.destination = data.destination;
     this.places = ko.observableArray(data.places);// This will be an array of Places instances
+    this.flagUrl = data.flagUrl;
 }
 
 var TrippViewModel = function () {
@@ -54,8 +55,13 @@ var TrippViewModel = function () {
     self.currentPage = ko.observable('Home');
     self.city = ko.observable();
     self.country = ko.observable();
+    self.countryCode = ko.observable();
+    self.flagUrl = ko.observable();
     self.showFavoritesButton = ko.observable(false);
     self.destination = ko.pureComputed(function () {
+        return `${self.city()}, ${self.country()} - ${self.countryCode()}`;
+    });
+    self.shortDestination = ko.pureComputed(function () {
         return `${self.city()}, ${self.country()}`;
     });
     self.setFavoritesPlaces = ko.observableArray(); // Gives the structure to render the data of Favorites
@@ -136,10 +142,23 @@ var TrippViewModel = function () {
 
         // TODO: Work on a proper validation function, this is just temporal
         if ((self.city() !== '') && (self.country() !== '')) {
-            geocoder.geocode({ 'address': self.destination() }, function (results, status) {
+            geocoder.geocode({ 'address': self.shortDestination() }, function (results, status) {
                 if (status == 'OK') {
                     styledMap.setCenter(results[0].geometry.location);
                     self.latlng = styledMap.getCenter();
+
+                    // To get the country code to render the proper flag
+                    for (let i = 0; i < results[0].address_components.length; i++) {
+                        let addressType = results[0].address_components[i].types[0];
+
+                        if(addressType === "country")
+                        {
+                            let countryCode = results[0].address_components[i].short_name;
+                            self.countryCode(countryCode);
+                            let stringUrl = `https://www.countryflags.io/${countryCode}/flat/24.png`;
+                            self.flagUrl(stringUrl);
+                        }
+                    }
                 } else {
                     alert('Geocode was not successful for the following reason: ' + status);
                 }
@@ -333,6 +352,9 @@ var TrippViewModel = function () {
 
             let tempPlaces = [], dummyPlaces = [];
             let dummyDestination = localStorage.key(index);
+            let tempCountryCode = dummyDestination.substring(dummyDestination.indexOf('-')+2);
+            let shortDestination = dummyDestination.substring(0,dummyDestination.indexOf('-')-1);
+            let dummyFlagUrl = `https://www.countryflags.io/${tempCountryCode}/flat/24.png`;
 
             tempPlaces = JSON.parse(localStorage.getItem(localStorage.key(index)));
 
@@ -368,8 +390,9 @@ var TrippViewModel = function () {
                 dummyPlaces.push(dummyPlace);
             }
             let objFavoritePlace = {
-                destination: dummyDestination,
-                places: dummyPlaces
+                destination: shortDestination,
+                places: dummyPlaces,
+                flagUrl: dummyFlagUrl
             }
             let dummyFavoritePlace = new FavoritePlace(objFavoritePlace);
             self.setFavoritesPlaces.push(dummyFavoritePlace);

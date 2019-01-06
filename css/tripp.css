@@ -349,13 +349,13 @@
     align-items:center;
 }
 
-.favorite-place-content{
-   /* width: 95%; */
+.favorite-place-destination {
+    
+    margin-left: 1em;
 }
 
-.favorite-place-destination {
-    flex : 1;
-    margin-left: 1em;
+.favorite-place-flag {
+    flex:1;
 }
 
 .fa-trash-alt {

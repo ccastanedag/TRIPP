@@ -78,7 +78,8 @@
                 <div data-bind="visible: currentPage() === 'Map'" class="places-info ">
                     <div class="places-info-content mdl-shadow--2dp through mdl-shadow--16dp">
                         <div class="country-content">
-                            <div data-bind="text:destination" class="country"></div>
+                            <div data-bind="text:shortDestination" class="country"></div>
+                            <img style="margin-left:1em;" data-bind="attr:{src:flagUrl}">
                         </div>
                         <div class="search-content">
                             <p data-bind="visible:isSearchContentValid() === false" class="explanation-text"><strong>TRIPP</strong>
@@ -128,14 +129,12 @@
                                     <div class="favorite-place-destination white" data-bind="text:destination">
 
                                     </div>
+                                    <div style="margin-left:0.5em;" class="favorite-place-flag">
+                                        <img data-bind="attr:{src:flagUrl}">
+                                    </div>                                    
                                     <div class="delete-all-content">
                                         <div class="fas fa-trash-alt big white" data-bind="click:$root.deleteFavoritePlace"></div>
                                     </div>
-                                    <!-- 
-                                    <div class="view-all-content">
-                                        <div class="far fa-eye white"></div>
-                                        <div class="white">All</div>
-                                    </div> -->
                                 </div>
                                 <div class="favorite-place-places" data-bind="foreach:places">
                                     <div class="place-detail" data-bind="click:$root.clickSelectFavoritePlace.bind($data,$parent), css : { selectedItem: $data == $root.selectedFavoritePlace() }">
