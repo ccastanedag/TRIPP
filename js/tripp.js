@@ -79,7 +79,7 @@ var TrippViewModel = function () {
                 if (self.currentPage() !== "Favorites") {
                     self.currentPage(page);
 
-                    
+
                     if (self.isSearchContentValid() === true) {
                         // Hide/Erase visually previous markers from Map Page if isSearchIsValid () TRUE
                         self.arrayMarkers.forEach(function (element) {
@@ -87,7 +87,7 @@ var TrippViewModel = function () {
                         });
                         self.lastSelectedPlace = self.selectedPlace();
                     }
-                    
+
                     // Create the render logic structure
                     self.createRenderStructure();
 
@@ -111,15 +111,14 @@ var TrippViewModel = function () {
                     self.currentPage(page);
 
                     // Logic to reposition the MAP center on Map page
-                    if(self.isSearchContentValid() === true) // is a valid search was made
+                    if (self.isSearchContentValid() === true) // is a valid search was made
                     {
                         self.selectedPlace(undefined);
                         self.clickSelectPlace(self.lastSelectedPlace);
                         styledMap.setZoom(15);
 
-                    }else{ // if city was defined but no search (eg: hotel) was made
-                        if(self.city() !== undefined)
-                        {
+                    } else { // if city was defined but no search (eg: hotel) was made
+                        if (self.city() !== undefined) {
                             styledMap.setCenter(self.latlng);
                             styledMap.setZoom(15);
                         }
@@ -140,30 +139,39 @@ var TrippViewModel = function () {
         self.city(toProperCase($('#city').val()));
         self.country($('#country').val().toUpperCase());
 
-        // TODO: Work on a proper validation function, this is just temporal
         if ((self.city() !== '') && (self.country() !== '')) {
-            geocoder.geocode({ 'address': self.shortDestination() }, function (results, status) {
-                if (status == 'OK') {
-                    styledMap.setCenter(results[0].geometry.location);
-                    self.latlng = styledMap.getCenter();
+            let regex = /^[a-zA-Z\s]*$/;
+            if ((regex.test(self.city()) === true) && (regex.test(self.country()) === true)) {
+                geocoder.geocode({ 'address': self.shortDestination() }, function (results, status) {
+                    if (status == 'OK') {
+                        styledMap.setCenter(results[0].geometry.location);
+                        self.latlng = styledMap.getCenter();
 
-                    // To get the country code to render the proper flag
-                    for (let i = 0; i < results[0].address_components.length; i++) {
-                        let addressType = results[0].address_components[i].types[0];
+                        // To get the country code to render the proper flag
+                        for (let i = 0; i < results[0].address_components.length; i++) {
+                            let addressType = results[0].address_components[i].types[0];
 
-                        if(addressType === "country")
-                        {
-                            let countryCode = results[0].address_components[i].short_name;
-                            self.countryCode(countryCode);
-                            let stringUrl = `https://www.countryflags.io/${countryCode}/flat/24.png`;
-                            self.flagUrl(stringUrl);
+                            if (addressType === "country") {
+                                let countryCode = results[0].address_components[i].short_name;
+                                self.countryCode(countryCode);
+                                let stringUrl = `https://www.countryflags.io/${countryCode}/flat/24.png`;
+                                self.flagUrl(stringUrl);
+                            }
                         }
+                        self.changePageTo('Map');
+                    } else {
+                        // Oops! City, COUNTRY wasn't found
+                        alert(`Oops! ${self.city()}, ${self.country()} wasn't found on Google Maps`);
                     }
-                } else {
-                    alert('Geocode was not successful for the following reason: ' + status);
-                }
-            });
-            self.changePageTo('Map');
+                });
+            } else {
+                // Enter a valid City/Country
+                alert('Oops! enter a valid City/Country');
+            }
+
+        } else {
+            // Enter a valid city/country
+            alert('Oops! enter a valid City/Country');
         }
     }
 
@@ -177,8 +185,17 @@ var TrippViewModel = function () {
         };
         // TODO: Work on a proper validation function, this is just temporal
         if ($inputSearch !== "") {
-            let placesService = new google.maps.places.PlacesService(styledMap);
-            placesService.textSearch(requestPlaces, callBackPlaces);
+            let regex = /^[a-zA-Z\s]*$/;
+            if(regex.test($inputSearch) === true)
+            {
+                let placesService = new google.maps.places.PlacesService(styledMap);
+                placesService.textSearch(requestPlaces, callBackPlaces);
+            }else {
+                alert('Oops! enter a valid search term. (Eg: Hotel)');
+            }
+            
+        } else {
+            alert("Oops! enter a valid search term. (Eg: Hotel)");
         }
 
     };
@@ -352,8 +369,8 @@ var TrippViewModel = function () {
 
             let tempPlaces = [], dummyPlaces = [];
             let dummyDestination = localStorage.key(index);
-            let tempCountryCode = dummyDestination.substring(dummyDestination.indexOf('-')+2);
-            let shortDestination = dummyDestination.substring(0,dummyDestination.indexOf('-')-1);
+            let tempCountryCode = dummyDestination.substring(dummyDestination.indexOf('-') + 2);
+            let shortDestination = dummyDestination.substring(0, dummyDestination.indexOf('-') - 1);
             let dummyFlagUrl = `https://www.countryflags.io/${tempCountryCode}/flat/24.png`;
 
             tempPlaces = JSON.parse(localStorage.getItem(localStorage.key(index)));
@@ -374,7 +391,6 @@ var TrippViewModel = function () {
                 // Add Click Event Listener, so when user click a marker the infoWindow Appear and select the proper Place from Favorite List
                 marker.addListener('click', function () {
                     // When a marker is clicked, the proper Place is selected on the Favorite List
-                    // TODO: Delete the implementation of this procedure
 
                     self.getFavoritePlaceFromMarker(this);
 
@@ -427,16 +443,15 @@ var TrippViewModel = function () {
         if (self.setFavoritesPlaces().length !== 0) {
             self.clickSelectFavoritePlace(self.setFavoritesPlaces()[0], self.setFavoritesPlaces()[0].places()[0]);
         } else {
-            // TODO : Redirect back to Home or City (if isSearchContentValid() === TRUE)
-           
-            if(self.city() !== undefined)
-            {
+
+
+            if (self.city() !== undefined) {
                 $(".back-to-city").click();
-            }else{
+            } else {
                 $(".back-to-home").click();
             }
-            
-            
+
+
         }
     };
 
@@ -702,7 +717,7 @@ function callBackPlaces(results, status) {
         case google.maps.places.PlacesServiceStatus.OK:
             {
                 $('#input-search').val("");
-                $('#input-search').attr('placeholder', 'Search...');
+                $('#input-search').attr('placeholder', 'Search...(Eg. Hotel)');
 
                 // Apply the proper styling (valid)
                 TripViewModelInstance.isSearchContentValid(true);
@@ -765,24 +780,34 @@ function callBackPlaces(results, status) {
             }
             break;
         case google.maps.places.PlacesServiceStatus.ZERO_RESULTS:
-            alert('ZERO_RESULTS');
+            alert('Oops! no results were found');
             $('#input-search').val("");
-            $('#input-search').attr('placeholder', 'Search...');
+            $('#input-search').attr('placeholder', 'Search...(Eg. Hotel)');
             break;
         case google.maps.places.PlacesServiceStatus.ERROR:
-            alert('ERROR');
+            alert('Oops! and error ocurred with Google Maps. Try again!');
+            $('#input-search').val("");
+            $('#input-search').attr('placeholder', 'Search...(Eg. Hotel)');
             break;
         case google.maps.places.PlacesServiceStatus.INVALID_REQUEST:
-            alert('INVALID_REQUEST');
+            alert('Oops! the request term is invalid');
+            $('#input-search').val("");
+            $('#input-search').attr('placeholder', 'Search...(Eg. Hotel)');
             break;
         case google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT:
-            alert('OVER_QUERY_LIMIT');
+            alert('Oops! The number of Google Maps requests has reach its limit. Try later');
+            $('#input-search').val("");
+            $('#input-search').attr('placeholder', 'Search...(Eg. Hotel)');
             break;
         case google.maps.places.PlacesServiceStatus.REQUEST_DENIED:
-            alert('REQUEST_DENIED');
+            alert('Oops! That request was denied by Google Maps');
+            $('#input-search').val("");
+            $('#input-search').attr('placeholder', 'Search...(Eg. Hotel)');
             break;
         case google.maps.places.PlacesServiceStatus.UNKNOWN_ERROR:
-            alert('UNKNOWN_ERROR');
+            alert('Oops! An unknown error has occurred with Google Maps, Try again!');
+            $('#input-search').val("");
+            $('#input-search').attr('placeholder', 'Search...(Eg. Hotel)');
             break;
     }
 }
@@ -800,22 +825,22 @@ function callBackPlaceDetail(result, status) {
 
             break;
         case google.maps.places.PlacesServiceStatus.ZERO_RESULTS:
-            alert('ZERO_RESULTS');
+            alert('Oops! no results were found');
             break;
         case google.maps.places.PlacesServiceStatus.ERROR:
-            alert('ERROR');
+            alert('Oops! an error have ocurred with Google Maps');
             break;
         case google.maps.places.PlacesServiceStatus.INVALID_REQUEST:
-            alert('INVALID_REQUEST');
+            alert('Oops! the info request was invalid');
             break;
         case google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT:
-            alert('OVER_QUERY_LIMIT');
+            alert('Oops! The number of Google Maps requests has reach its limit. Try later');
             break;
         case google.maps.places.PlacesServiceStatus.REQUEST_DENIED:
-            alert('REQUEST_DENIED');
+            alert('Oops! That request was denied by Google Maps');
             break;
         case google.maps.places.PlacesServiceStatus.UNKNOWN_ERROR:
-            alert('UNKNOWN_ERROR');
+            alert('Oops! An unknown error has occurred with Google Maps, Try again!');
             break;
     }
 }

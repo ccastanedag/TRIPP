@@ -56,12 +56,14 @@
                     <p class="home-text">Where you will TRIPP ?</p>
                     <form autocomplete="off" action="#" id="form-home">
                         <div class="mdl-textfield mdl-js-textfield">
-                            <input class="mdl-textfield__input" type="text" id="city">
+                            <input class="mdl-textfield__input" type="text" id="city" pattern="[A-Z,a-z, ]*">
                             <label class="mdl-textfield__label" for="city">City... (Eg: Tokio)</label>
+                            <span class="mdl-textfield__error">Oops! letters and spaces only</span>
                         </div>
                         <div class="mdl-textfield mdl-js-textfield">
-                            <input class="mdl-textfield__input" type="text" id="country">
+                            <input class="mdl-textfield__input" type="text" id="country" pattern="[A-Z,a-z, ]*">
                             <label class="mdl-textfield__label" for="country">Country... (Eg: Japan)</label>
+                            <span class="mdl-textfield__error">Oops! letters and spaces only</span>
                         </div>
                         <!-- Accent-colored raised button with ripple -->
                         <button data-bind="click:codeAddress" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
@@ -83,18 +85,19 @@
                         </div>
                         <div class="search-content">
                             <p data-bind="visible:isSearchContentValid() === false" class="explanation-text"><strong>TRIPP</strong>
-                                allows you to search places like cafeterias, bars, hotels, etc and save them to your
+                                allows you to search places like cafeterias, bars, hotels and save them to your
                                 favorites list. Try it!</p>
                             <!-- Search Form  -->
                             <form autocomplete="off" action="#" id="form-search" class="form-search flex-column">
                                 <div id="div-search" class="mdl-textfield mdl-js-textfield">
                                     <input class="mdl-textfield__input" type="text" id="input-search" pattern="[A-Z,a-z, ]*">
-                                    <label class="mdl-textfield__label" for="search">Search...</label>
-                                    <span class="mdl-textfield__error">Letters and spaces only</span>
+                                    <label class="mdl-textfield__label" for="search">Search...(Eg. Hotel)</label>
+                                    <span class="mdl-textfield__error">Oops! letters and spaces only</span>
                                 </div>
                                 <button data-bind="click:gatherPlacesData" id="button-search" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                                     Let's Go
                                 </button>
+                                <span class="mdl-textfield__error">Oops! letters and spaces only</span>
                             </form>
                         </div>
                         <div class="places-content" data-bind="foreach: arrayPlaces, visible: isSearchContentValid()">
@@ -171,6 +174,7 @@
                             <button data-bind="visible:city() !== undefined, click:changePageTo.bind($data,'Map')" class="back-to-city mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                                 Back to <span style="font-weight:bold" data-bind="text:city"></span>
                             </button>
+                            
 
                         </div>
                     </div>
