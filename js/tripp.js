@@ -522,10 +522,10 @@ var addToFavorites = function () {
     TripViewModelInstance.addToFavorites();
 };
 
-// Init render of Favorites Page
-var showFavorites = function () {
-    TripViewModelInstance.changePageTo('Favorites');
-};
+// Change page from the Navbar
+var changePageTo = function(page){
+    TripViewModelInstance.changePageTo(page);
+}
 
 // Search an element inside iterable using attribute as criteria
 var isElementInSetByAttribute = function (element, set, attribute) {

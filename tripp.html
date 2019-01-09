@@ -23,24 +23,24 @@
             <div class="mdl-layout__header-row">
                 <!-- Title -->
                 <div class="mdl-layout-title">
-                    <img data-bind="click:changePageTo.bind($data,'Home')" src="img/logo-navbar.png" width="120" alt="Tripp Logo">
+                    <img data-bind="click:changePageTo.bind($data,'Home')" src="img/logo-navbar.png" width="120" alt="Tripp Logo" class="pointer">
                 </div>
                 <!-- Add spacer, to align navigation to the right -->
                 <div class="mdl-layout-spacer"></div>
                 <!-- Navigation. We hide it in small screens. -->
                 <nav class="mdl-navigation mdl-layout--large-screen-only">
-                    <!-- <a class="mdl-navigation__link" href="">Favorites</a> -->
-                    <button data-bind="visible:showFavoritesButton()" onclick="showFavorites()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Favorites</button>
-                    <a class="mdl-navigation__link" href="">About TRIPP</a>
+                    <a class="pointer mdl-navigation__link" onclick="changePageTo('Home')">Home</a>
+                    <button data-bind="visible:showFavoritesButton()" onclick="changePageTo('Favorites')" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Favorites</button>
+                    <a class="pointer mdl-navigation__link" onclick="changePageTo('About')">About TRIPP</a>
                 </nav>
             </div>
         </header>
         <div class="mdl-layout__drawer mdl-layout--small-screen-only">
             <span class="mdl-layout-title">TRIPP</span>
             <nav class="mdl-navigation">
-                <!-- <a class="mdl-navigation__link" href="">Favorites</a> -->
-                <a class="mdl-navigation__link" data-bind="visible:showFavoritesButton()" onclick="showFavorites()">Favorites</a>
-                <a class="mdl-navigation__link" href="">About TRIPP</a>
+                <a class="pointer mdl-navigation__link" onclick="changePageTo('Home')">Home</a>
+                <a class="pointer mdl-navigation__link" data-bind="visible:showFavoritesButton()" onclick="changePageTo('Favorites')">Favorites</a>
+                <a class="pointer mdl-navigation__link" onclick="changePageTo('About')">About TRIPP</a>
             </nav>
         </div>
         <main class="mdl-layout__content">
@@ -73,7 +73,39 @@
                 </div>
             </div>
 
-            <div data-bind="visible: currentPage() !== 'Home'" class="page-content">
+            <div data-bind="visible: currentPage() === 'About'" class="home-content">
+                <div class="logo-content">
+                    <img srcset="img/logo-mobile.png 185w,
+                                     img/logo-desktop.png 350w"
+                        sizes="(max-width: 480px) 150px,
+                                         (min-width: 481px) 300px"
+                        src="img/logo-desktop.png" alt="TRIP LOGO">
+                </div>
+                <div class="destination-content">
+                    <p class="about-text about-text-title">DEVELOPED BY<br> CARLOS CASTAÑEDA</p>
+                    <p class="about-text about-text-normal">CONTACT ME</p>
+                    <p class="about-text"><a class="about-text about-text-email" href="mailto:carlos.castaneda.gutierrez@gmail.com" target="_top">carlos.castaneda.gutierrez@gmail.com</a></p>
+                    <p class="about-text about-text-normal">
+                        VISIT
+                    </p>
+                    <div class="about-buttons">
+                        <!-- Colored raised button -->
+                        <button class="about-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            My Portafolio
+                        </button>
+                        <!-- Colored raised button -->
+                        <button class="about-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            My Github
+                        </button>
+                        <!-- Colored raised button -->
+                        <button class="about-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            Download CV
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div data-bind="visible: (currentPage() !== 'Home')&&(currentPage() !== 'About')" class="page-content">
                 <div class="map-content">
 
                 </div>
@@ -134,7 +166,7 @@
                                     </div>
                                     <div style="margin-left:0.5em;" class="favorite-place-flag">
                                         <img data-bind="attr:{src:flagUrl}">
-                                    </div>                                    
+                                    </div>
                                     <div class="delete-all-content">
                                         <div class="fas fa-trash-alt big white" data-bind="click:$root.deleteFavoritePlace"></div>
                                     </div>
@@ -168,13 +200,15 @@
                             </div>
                         </div>
                         <div class="favorite-footer">
-                            <button data-bind="visible:city() === undefined, click:changePageTo.bind($data,'Home')" class="back-to-home mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            <button data-bind="visible:city() === undefined, click:changePageTo.bind($data,'Home')"
+                                class="back-to-home mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                                 Back to Home
                             </button>
-                            <button data-bind="visible:city() !== undefined, click:changePageTo.bind($data,'Map')" class="back-to-city mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                            <button data-bind="visible:city() !== undefined, click:changePageTo.bind($data,'Map')"
+                                class="back-to-city mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                                 Back to <span style="font-weight:bold" data-bind="text:city"></span>
                             </button>
-                            
+
 
                         </div>
                     </div>

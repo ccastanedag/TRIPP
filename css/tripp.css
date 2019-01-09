@@ -2,6 +2,10 @@
     font-family: 'Noto Sans', sans-serif;
 }
 
+.mdl-layout{
+    position: relative;
+}
+
 .mdl-layout__content{
     display:flex;
     align-items: stretch;
@@ -21,7 +25,7 @@
     box-shadow: 0px 10px 70px 0px rgba(0,86,172,0.85);
 }
 
-.mdl-layout-title img {
+.pointer {
     cursor : pointer;
 }
 
@@ -410,3 +414,68 @@
 .favorite-footer {
     margin: 1em;
 }
+
+/*=======================================================================*/
+/*==================        ABOUT PAGE STYLING         ====================*/
+/*=======================================================================*/
+
+/* ================== ABOUT - Begin =================*/
+.about-text{
+    color : white;
+    text-align: center;
+}
+
+.about-text-normal{
+    font-size: 0.85em;
+    margin-bottom: 0.5em;
+}
+
+.about-text-title{
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+.about-text-email{
+    font-weight: normal;
+    font-size: 1.1em;
+}
+
+.destination-content {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+}
+.about-buttons{
+    display:flex;
+    flex-direction: column;
+}
+.destination-content{
+    margin-top: 1.2em;
+}
+
+.about-button{
+    margin-top: 0.5em;
+}
+
+/* ================== MEDIAQUERIES - Desktop - Begin =================*/
+
+@media only screen and (min-width: 600px)
+{
+    .destination-content{
+        display:initial;
+        align-items:initial;
+        width: initial;
+    }
+    .about-buttons{
+        flex-direction: row;
+    }
+    .about-button{
+        margin-top: initial;
+        margin-left: 0.5em;
+    }
+}
+
+/* ================== MEDIAQUERIES - Desktop - End =================*/
+
+
