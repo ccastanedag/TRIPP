@@ -417,7 +417,11 @@ var TrippViewModel = function () {
 
     self.deleteFavoritePlace = function (favoritePlace) {
         // Delete Favorite Place from localStorage
-        localStorage.removeItem(favoritePlace.destination)
+        let countryCode = favoritePlace.flagUrl.substring(favoritePlace.flagUrl.indexOf('.io/')+4,favoritePlace.flagUrl.indexOf('.io/')+6);
+        let destination = favoritePlace.destination;
+        destination += ` - ${countryCode}`;
+
+        localStorage.removeItem(destination)
 
         // To update the render state of the Favorite Button
         if (localStorage.length === 0) {
@@ -457,7 +461,9 @@ var TrippViewModel = function () {
 
     self.deletePlace = function (favoritePlace, place) {
         //Delete Place from localStorage
+        let countryCode = favoritePlace.flagUrl.substring(favoritePlace.flagUrl.indexOf('.io/')+4,favoritePlace.flagUrl.indexOf('.io/')+6);
         let destination = favoritePlace.destination;
+        destination += ` - ${countryCode}`;
         let places = JSON.parse(localStorage.getItem(destination));
         for (let index = 0; index < places.length; index++) {
             if (places[index].placeId === place.placeId) {
