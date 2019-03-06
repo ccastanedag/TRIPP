@@ -1,481 +1,529 @@
-*{
-    font-family: 'Noto Sans', sans-serif;
+* {
+  font-family: 'Noto Sans', sans-serif;
 }
 
-.mdl-layout{
-    position: relative;
+.mdl-layout {
+  position: relative;
 }
 
-.mdl-layout__content{
-    display:flex;
-    align-items: stretch;
-    align-content: stretch;
+.mdl-layout__content {
+  display: flex;
+  align-items: stretch;
+  align-content: stretch;
 }
 
-.page-content{
-    flex: 1;
-    position : relative;
-    background-color: white;
+.page-content {
+  flex: 1;
+  position: relative;
+  background-color: white;
 }
 
 .header-content {
-    background-color: #FBFAFB;
-    -webkit-box-shadow: 0px 10px 70px 0px rgba(0,86,172,0.85);
-    -moz-box-shadow: 0px 10px 70px 0px rgba(0,86,172,0.85);
-    box-shadow: 0px 10px 70px 0px rgba(0,86,172,0.85);
+  background-color: #FBFAFB;
+  -webkit-box-shadow: 0px 10px 70px 0px rgba(0, 86, 172, 0.85);
+  -moz-box-shadow: 0px 10px 70px 0px rgba(0, 86, 172, 0.85);
+  box-shadow: 0px 10px 70px 0px rgba(0, 86, 172, 0.85);
 }
 
 .pointer {
-    cursor : pointer;
+  cursor: pointer;
 }
 
 /*=======================================================================*/
+
 /*==================        MAP PAGE STYLING         ====================*/
+
 /*=======================================================================*/
 
 /* ================== MAP - Begin =================*/
 
 .map-content {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: stretch;
-    position: relative;
-    
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  position: relative;
 }
 
 /* ================== MAP - End =================*/
 
 /* ================== PLACES - Begin =================*/
 
-.places-info{
-    width:100%;
-    height:50%;
-    position:absolute;
-    bottom:0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.places-info {
+  width: 100%;
+  height: 50%;
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.places-info-content{
-    display:flex;
-    flex-direction: column;
-    width:95%;
-    height:90%;
-    -webkit-border-radius: 5px; 
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    align-items: center;
-    background-color:white;
+.places-info-content {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  height: 90%;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  align-items: center;
+  background-color: white;
 }
 
-.country-content{
-    height: 2.5em;
-    background-color: #673ab7;
-    -webkit-border-top-left-radius: 5px;
-    -webkit-border-top-right-radius: 5px;
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-topright: 5px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    display: flex;
-    align-items: center;
-    align-self: stretch
+.country-content {
+  height: 2.5em;
+  background-color: #673ab7;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  display: flex;
+  align-items: center;
+  align-self: stretch
 }
 
-.country{
-    color: white;
-    padding-left: 0.5em;
+.country {
+  color: white;
+  padding-left: 0.5em;
 }
 
-.search-content, .places-content {
-    background-color: white;
+.search-content,
+.places-content {
+  background-color: white;
 }
 
 .search-content {
-    flex:2;
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;    
-    margin-top: 0.5em;
-    margin-bottom: 0.7em;
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.5em;
+  margin-bottom: 0.7em;
 }
 
 .form-search {
-    display:flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .places-content {
-    flex:8;
-    -webkit-border-bottom-right-radius: 5px;
-    -webkit-border-bottom-left-radius: 5px;
-    -moz-border-radius-bottomright: 5px;
-    -moz-border-radius-bottomleft: 5px;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    display:flex;
-    flex-direction: column;
-    overflow-y : scroll;
-    width:95%;
-    position: relative;
+  flex: 8;
+  -webkit-border-bottom-right-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  width: 95%;
+  position: relative;
 }
 
 .places-content>div {
-    border-bottom:4px solid #fbfbfb;
+  border-bottom: 4px solid #fbfbfb;
 }
 
-.place-detail{
-    display: flex;
-    margin-bottom: 0.25em;
-    margin-top: 0.25em;
-    min-height: 70px;
+.place-detail {
+  display: flex;
+  margin-bottom: 0.25em;
+  margin-top: 0.25em;
+  min-height: 70px;
 }
 
-#div-search{
-    width: 95%;
+#div-search {
+  width: 95%;
 }
 
-.explanation-text{
-    color: #171719;
-    text-align: center;
-    font-size: 0.9em;
-    width: 60%;
-    margin-bottom:0;
+.explanation-text {
+  color: #171719;
+  text-align: center;
+  font-size: 0.9em;
+  width: 60%;
+  margin-bottom: 0;
 }
 
-.place-name>span{
-   /* color: #279db3;*/
-    color : #673ab7;
-    font-weight: bold;
-    font-size: 1.15em;
-}
-.place-type>span{
-    color: #171719;
-    font-size: 0.85em;
+.place-name>span {
+  /* color: #279db3;*/
+  color: #673ab7;
+  font-weight: bold;
+  font-size: 1.15em;
 }
 
-.place-rating>span{
-    margin-top:0.5em;
-    padding:0;
+.place-type>span {
+  color: #171719;
+  font-size: 0.85em;
 }
 
-.place-image>img{
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+.place-rating>span {
+  margin-top: 0.5em;
+  padding: 0;
 }
 
-#input-search{
-    color : #673ab7;
+.place-image>img {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
+#input-search {
+  color: #673ab7;
 }
 
 .place-data {
-    margin-left : 0.5em;
-    flex:1;
+  margin-left: 0.5em;
+  flex: 1;
 }
 
 .selectedItem {
- background-color : #ffebf3ff;
+  background-color: #ffebf3ff;
 }
 
 /* ================== PLACES - End =================*/
 
 /* ================== INFOWINDOW - Begin =================*/
+
 .info-window-content {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
-.info-window-data-name{
-    background-color: #673ab7;
-    color : white;
-    font-size: 1.25em;
-    font-weight: bold;
-    padding:0.4em;
+.info-window-data-name {
+  background-color: #673ab7;
+  color: white;
+  font-size: 1.25em;
+  font-weight: bold;
+  padding: 0.4em;
 }
 
 .info-window-label {
-    color: #673ab7;
-    font-size: 1em;
-    margin: 0.35em 0;
-    line-height: 0.7em;
-    font-weight: bold;
+  color: #673ab7;
+  font-size: 1em;
+  margin: 0.35em 0;
+  line-height: 0.7em;
+  font-weight: bold;
 }
 
-.info-window-data{
-    color: #171719;
-    font-size: 0.9em;
-    margin: 0.35em 0;
-    line-height: 1.2em;
+.info-window-data {
+  color: #171719;
+  font-size: 0.9em;
+  margin: 0.35em 0;
+  line-height: 1.2em;
 }
 
-.info-window-image-content{
-    padding-right: 0.75em;
+.info-window-image-content {
+  padding-right: 0.75em;
 }
 
-.info-window-image-content>img{
-    width:65px;
+.info-window-image-content>img {
+  width: 65px;
 }
 
-.info-window-data-rating, .info-window-buttons-content{
-    margin-top: 0.5em;
+.info-window-data-rating,
+.info-window-buttons-content {
+  margin-top: 0.5em;
 }
 
-.info-window-buttons-content{
-    display: flex;
-    border-top: 1px solid rgba(0,0,0,.12);
-    margin-top: 0.5em;
-    justify-content: center;
-    
+.info-window-buttons-content {
+  display: flex;
+  border-top: 1px solid rgba(0, 0, 0, .12);
+  margin-top: 0.5em;
+  justify-content: center;
 }
 
-.info-window-buttons-content>div{
-    padding: 0.25em;
+.info-window-buttons-content>div {
+  padding: 0.25em;
 }
 
-.info-window-middle{
-    display:flex;
-    
-    margin-top: 0.5em;
-    align-items: center;
+.info-window-middle {
+  display: flex;
+  margin-top: 0.5em;
+  align-items: center;
 }
 
-.info-window-button{
-    font-size: 0.85em;
-   
-    flex-grow:1;
+.info-window-button {
+  font-size: 0.85em;
+  flex-grow: 1;
 }
 
 /* ================== INFOWINDOW - End =================*/
 
 /* ================== MEDIAQUERIES - Desktop - Begin =================*/
-@media only screen and (min-width: 600px)
-{
-    .places-info{
-        top:0;
-        left:2em;
-        width: 45%;
-        max-width: 350px;
-        height:100%;
-    }
 
-    .country {
-        padding-left: 0.8em;
-        font-size: 1.05em;
-    }
-
-    .explanation-text {
-        font-size: 0.95em;
-    }
+@media only screen and (min-width: 600px) {
+  .places-info {
+    top: 0;
+    left: 2em;
+    width: 45%;
+    max-width: 350px;
+    height: 100%;
+  }
+  .country {
+    padding-left: 0.8em;
+    font-size: 1.05em;
+  }
+  .explanation-text {
+    font-size: 0.95em;
+  }
 }
 
 /* ================== MEDIAQUERIES - Desktop - End =================*/
 
 /*=======================================================================*/
+
 /*==================       HOME PAGE STYLING         ====================*/
+
 /*=======================================================================*/
 
-.home-content{
-    background: url(../img/tripp-background.png) no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    align-self : stretch;
-    flex : 1;
-    display: flex;
-    flex-direction: column;
-    justify-content : center;
-    align-items: center;
+.home-content {
+  background: url(../img/tripp-background.png) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  align-self: stretch;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 #form-home {
-    display:flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
-#form-home .mdl-textfield__input{
-    border-bottom: 1px solid #fff;
+#form-home .mdl-textfield__input {
+  border-bottom: 1px solid #fff;
 }
 
 #form-home .mdl-button {
-    align-self: center;
-    margin-top: 1em;
+  align-self: center;
+  margin-top: 1em;
 }
 
-#form-home .mdl-textfield__input, #form-home .mdl-textfield__label {
-    color: white;
-    opacity: 0.75;
+#form-home .mdl-textfield__input,
+#form-home .mdl-textfield__label {
+  color: white;
+  opacity: 0.75;
 }
 
 .home-text {
-    margin-top : 1.25em;
-    color: white;
-    font-size: 1.5em;
-    text-align: center;
+  margin-top: 1.25em;
+  color: white;
+  font-size: 1.5em;
+  text-align: center;
+}
+
+.logo-content{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.25em;
+}
+.logo-content img{
+  width:50%;
 }
 
 /* ================== MEDIAQUERIES - Desktop - Begin =================*/
 
-@media only screen and (min-width: 600px)
-{
-    .home-content {
-        flex-direction: row;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
+@media screen and (max-width:992px) and (orientation:landscape) {
+  .home-content {
+    flex-direction: row;
+    height:100vh;
+  }
+  .logo-content{
+    display:none;
+  }
+  .destination-content{
+    margin:0;
+    align-items: center;
+  }
+  .home-text{
+    margin:0;
+  }
+}
 
-    .logo-content {
-        margin-right : 8.25em;
-    }
+@media only screen and (min-width: 600px) and (orientation:portrait) {
+  .home-content {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .logo-content {
+    margin-right: 3.25em;
+  }
+  .destination-content{
+    margin-right: 2em;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .home-content {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .logo-content {
+    margin-right: 8.25em;
+  }
+  .logo-content img {
+    width:65%;
+  }
 }
 
 /* ================== MEDIAQUERIES - Desktop - End =================*/
 
 /*=======================================================================*/
-/*==================     FAVORITES PAGE STYLING      ====================*/
-/*=======================================================================*/
-.favorite-place-destination-content{
-    height: 3.5em;
-    background-color: #673ab7;
-    -webkit-border-top-left-radius: 5px;
-    -webkit-border-top-right-radius: 5px;
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-topright: 5px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
 
-    display: flex;
-    align-items:center;
+/*==================     FAVORITES PAGE STYLING      ====================*/
+
+/*=======================================================================*/
+
+.favorite-place-destination-content {
+  height: 3.5em;
+  background-color: #673ab7;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  display: flex;
+  align-items: center;
 }
 
 .favorite-place-destination {
-    
-    margin-left: 1em;
+  margin-left: 1em;
 }
 
 .favorite-place-flag {
-    flex:1;
+  flex: 1;
 }
 
 .fa-trash-alt {
-    width: 45px;
-    cursor: pointer;
+  width: 45px;
+  cursor: pointer;
 }
 
 .favorite-place-destination-content:first-child {
-    margin-top: 1em;
+  margin-top: 1em;
 }
 
 .white {
-    color: white;
+  color: white;
 }
 
 .purple {
-    color: #673ab7;
+  color: #673ab7;
 }
 
-.delete-all-content, .view-all-content{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.delete-all-content,
+.view-all-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .fa-trash-alt:hover {
-    color : rgb(255,64,129);
+  color: rgb(255, 64, 129);
 }
 
 .favorite-place {
-    display: flex;
+  display: flex;
 }
 
-.favorite-place div:first-child{
-    flex:1;
+.favorite-place div:first-child {
+  flex: 1;
 }
 
-.favorite-place .delete-all-content{
-    align-self: center;
-    width: 45px;
-   
+.favorite-place .delete-all-content {
+  align-self: center;
+  width: 45px;
 }
 
 .big {
-    font-size : 1.5em;
+  font-size: 1.5em;
 }
 
 .small {
-    font-size : 1.2em;
+  font-size: 1.2em;
 }
 
 .favorite-footer {
-    margin: 1em;
+  margin: 1em;
 }
 
 /*=======================================================================*/
+
 /*==================        ABOUT PAGE STYLING         ====================*/
+
 /*=======================================================================*/
 
 /* ================== ABOUT - Begin =================*/
-.about-text{
-    color : white;
-    text-align: center;
+
+.about-text {
+  color: white;
+  text-align: center;
 }
 
-.about-text-normal{
-    font-size: 0.85em;
-    margin-bottom: 0.5em;
+.about-text-normal {
+  font-size: 0.85em;
+  margin-bottom: 0.5em;
 }
 
-.about-text-title{
-    font-size: 1.25em;
-    font-weight: bold;
+.about-text-title {
+  font-size: 1.25em;
+  font-weight: bold;
 }
 
-.about-text-email{
-    font-weight: normal;
-    font-size: 1.1em;
+.about-text-email {
+  font-weight: normal;
+  font-size: 1.1em;
 }
 
 .destination-content {
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-    width: 90%;
-}
-.about-buttons{
-    display:flex;
-    flex-direction: column;
-}
-.destination-content{
-    margin-top: 1.2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
 }
 
-.about-button{
-    margin-top: 0.5em;
+.about-buttons {
+  display: flex;
+  flex-direction: column;
+}
+
+/* .destination-content {
+  margin-top: 1.2em;
+} */
+
+.about-button {
+  margin-top: 0.5em;
 }
 
 /* ================== MEDIAQUERIES - Desktop - Begin =================*/
 
-@media only screen and (min-width: 600px)
-{
-    .destination-content{
-        display:initial;
-        align-items:initial;
-        width: initial;
-    }
-    .about-buttons{
-        flex-direction: row;
-    }
-    .about-button{
-        margin-top: initial;
-        margin-left: 0.5em;
-    }
+@media only screen and (min-width: 600px) {
+  .destination-content {
+    display: initial;
+    align-items: initial;
+    width: initial;
+  }
+  .about-buttons {
+    flex-direction: row;
+  }
+  .about-button {
+    margin-top: initial;
+    margin-left: 0.5em;
+  }
 }
 
 /* ================== MEDIAQUERIES - Desktop - End =================*/
-
-
