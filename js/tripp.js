@@ -178,6 +178,7 @@ var TrippViewModel = function () {
     self.gatherPlacesData = function () {
 
         let $inputSearch = $('#input-search').val();
+        $('#input-search').blur(); 
         // Define que border of viewport of the map, to make the query (Ex:Cafeteria)
         let requestPlaces = {
             bounds: styledMap.getBounds(),

@@ -96,7 +96,7 @@
 }
 
 .search-content {
-  flex: 2;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -145,7 +145,7 @@
   color: #171719;
   text-align: center;
   font-size: 0.9em;
-  width: 60%;
+  width: 80%;
   margin-bottom: 0;
 }
 
@@ -256,6 +256,38 @@
 
 /* ================== MEDIAQUERIES - Desktop - Begin =================*/
 
+@media screen and (max-width:992px) and (orientation:landscape) {
+  .places-info {
+    top: 2em;
+    height: 100%;
+  }
+  .explanation-text {
+    width: 80%;
+  }
+  .search-content {
+    margin: 0;
+    min-height: 6em;
+  }
+  /* #form-search {
+    margin: 0;
+  } */
+  .places-info-content{
+    height: 95%;
+  }
+}
+
+@media screen and (max-height:359px) and (orientation:landscape) {
+  .places-content {
+    display: none;
+  }
+  .explanation-text{
+    width: 95%;
+  }
+  .places-info-content{
+    height: 100%;
+  }
+}
+
 @media only screen and (min-width: 600px) {
   .places-info {
     top: 0;
@@ -282,7 +314,7 @@
 /*=======================================================================*/
 
 .home-content {
-  background: url(../img/tripp-background.png) no-repeat center center fixed; 
+  background: url(../img/tripp-background.png) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -322,14 +354,15 @@
   text-align: center;
 }
 
-.logo-content{
+.logo-content {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 1.25em;
 }
-.logo-content img{
-  width:50%;
+
+.logo-content img {
+  width: 50%;
 }
 
 /* ================== MEDIAQUERIES - Desktop - Begin =================*/
@@ -337,17 +370,17 @@
 @media screen and (max-width:992px) and (orientation:landscape) {
   .home-content {
     flex-direction: row;
-    height:100vh;
+    height: 100vh;
   }
-  .logo-content{
-    display:none;
+  .logo-content {
+    display: none;
   }
-  .destination-content{
-    margin:0;
+  .destination-content {
+    margin: 0;
     align-items: center;
   }
-  .home-text{
-    margin:0;
+  .home-text {
+    margin: 0;
   }
 }
 
@@ -360,7 +393,7 @@
   .logo-content {
     margin-right: 3.25em;
   }
-  .destination-content{
+  .destination-content {
     margin-right: 2em;
   }
 }
@@ -375,7 +408,7 @@
     margin-right: 8.25em;
   }
   .logo-content img {
-    width:65%;
+    width: 65%;
   }
 }
 
